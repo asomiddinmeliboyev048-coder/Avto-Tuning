@@ -1,10 +1,24 @@
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, ContactShadows, Float, Html } from "@react-three/drei";
-import { Check, RotateCcw, Sparkles } from "lucide-react";
+import {
+  OrbitControls,
+  ContactShadows,
+  Environment,
+  Lightformer,
+  Html,
+  MeshReflectorMaterial,
+} from "@react-three/drei";
+import {
+  Check,
+  RotateCcw,
+  Sparkles,
+  Maximize2,
+  Minimize2,
+  Car,
+} from "lucide-react";
 import CarModel from "./garage/CarModel.jsx";
 import {
-  CAR_MODELS,
+  UZ_CARS,
   BODY_COLORS,
   TINT_LEVELS,
   WHEEL_OPTIONS,
@@ -16,17 +30,95 @@ import "./VirtualGarage.css";
 function CanvasLoader() {
   return (
     <Html center>
-      <div className="garage__loading">3D sahna yuklanmoqda…</div>
+      <div className="garage__loading">3D mashina yuklanmoqda…</div>
     </Html>
   );
 }
 
+// Showroom poli (aks etuvchi) + chiroqlar
+function Showroom() {
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <spotLight
+        position={[6, 10, 6]}
+        angle={0.35}
+        penumbra={1}
+        intensity={2.4}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+      />
+      <spotLight position={[-8, 6, -4]} intensity={1.1} color="#ff8a3d" />
+      <pointLight position={[0, 5, -8]} intensity={0.7} color="#3d6bff" />
+
+      {/* Tashqi fayl talab qilmaydigan studiya muhiti (akslar uchun) */}
+      <Environment resolution={256}>
+        <Lightformer
+          intensity={2}
+          position={[0, 5, -5]}
+          scale={[10, 5, 1]}
+          color="#ffffff"
+        />
+        <Lightformer
+          intensity={1.4}
+          position={[-5, 2, 2]}
+          scale={[6, 6, 1]}
+          color="#aac4ff"
+        />
+        <Lightformer
+          intensity={1.4}
+          position={[5, 2, 2]}
+          scale={[6, 6, 1]}
+          color="#ffd0a8"
+        />
+        <Lightformer
+          intensity={3}
+          position={[0, 6, 3]}
+          scale={[10, 1, 1]}
+          color="#ffffff"
+        />
+      </Environment>
+
+      {/* Aks etuvchi pol */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.51, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[60, 60]} />
+        <MeshReflectorMaterial
+          resolution={512}
+          mirror={0.45}
+          mixBlur={6}
+          mixStrength={1.2}
+          blur={[300, 80]}
+          roughness={0.9}
+          depthScale={1.1}
+          minDepthThreshold={0.4}
+          maxDepthThreshold={1.2}
+          color="#0a0a0f"
+          metalness={0.6}
+        />
+      </mesh>
+      <ContactShadows
+        position={[0, -0.5, 0]}
+        opacity={0.6}
+        scale={16}
+        blur={2.4}
+        far={6}
+      />
+    </>
+  );
+}
+
 export default function VirtualGarage() {
-  const [model, setModel] = useState(CAR_MODELS[0]);
-  const [color, setColor] = useState(BODY_COLORS[0]);
+  const [car, setCar] = useState(UZ_CARS[1]); // Nexia default
+  const [color, setColor] = useState(BODY_COLORS[0]); // oq default
   const [tint, setTint] = useState(TINT_LEVELS[0]);
   const [wheel, setWheel] = useState(WHEEL_OPTIONS[0]);
   const [addons, setAddons] = useState({});
+  const [fullscreen, setFullscreen] = useState(false);
+  const stageRef = useRef(null);
 
   const toggleAddon = (id) =>
     setAddons((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -38,13 +130,28 @@ export default function VirtualGarage() {
     setAddons({});
   };
 
+  // Fullscreen boshqaruvi
+  const toggleFullscreen = () => {
+    const el = stageRef.current;
+    if (!document.fullscreenElement) {
+      el?.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+  useEffect(() => {
+    const onChange = () => setFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
   const total = useMemo(() => {
-    let sum = model.basePrice + color.price + tint.price + wheel.price;
+    let sum = car.basePrice + color.price + tint.price + wheel.price;
     TUNING_ADDONS.forEach((a) => {
       if (addons[a.id]) sum += a.price;
     });
     return sum;
-  }, [model, color, tint, wheel, addons]);
+  }, [car, color, tint, wheel, addons]);
 
   const addonMap = useMemo(
     () => ({
@@ -64,105 +171,102 @@ export default function VirtualGarage() {
             <Sparkles size={14} /> Virtual garaj
           </span>
           <h2 className="section-title">
-            O'z mashinangizni <span className="gradient-text">jonli</span>{" "}
-            loyihalang
+            O'z mashinangizni <span className="gradient-text">tanlang</span> va
+            jonli loyihalang
           </h2>
           <p className="section-sub">
-            Modelni tanlang, rang, tonirovka, disklar va tuning detallarini
-            qo'shing — o'zgarishlarni real vaqtda 3D ko'rinishda ko'ring va narx
-            avtomatik hisoblanadi.
+            O'zbekistondagi mashinani tanlang — aynan o'sha model 3D'da chiqadi.
+            Rang, tonirovka, disk va tuning detallarini qo'shing, 360°
+            aylantiring va to'liq ekranda ko'ring. Narx avtomatik hisoblanadi.
           </p>
         </div>
 
-        <div className="garage__layout">
-          {/* 3D Viewport */}
+        <div
+          className={`garage__stage ${fullscreen ? "garage__stage--fs" : ""}`}
+          ref={stageRef}
+        >
+          {/* 3D ko'rinish */}
           <div className="garage__viewport">
             <Canvas
               shadows
               dpr={[1, 2]}
-              camera={{ position: [6, 3, 7], fov: 38 }}
               gl={{ alpha: true, antialias: true }}
+              camera={{ position: [6.5, 2.4, 7.5], fov: 38 }}
             >
-              <ambientLight intensity={0.6} />
-              <spotLight
-                position={[8, 12, 6]}
-                angle={0.3}
-                penumbra={1}
-                intensity={2.2}
-                castShadow
-                shadow-mapSize={[1024, 1024]}
-              />
-              <spotLight position={[-8, 6, -6]} intensity={1} color="#ff8a3d" />
-              <pointLight
-                position={[0, 4, -8]}
-                intensity={0.8}
-                color="#3d6bff"
-              />
-
               <Suspense fallback={<CanvasLoader />}>
-                <Float
-                  speed={1.2}
-                  rotationIntensity={0.15}
-                  floatIntensity={0.3}
-                >
-                  <CarModel
-                    bodyColor={color.hex}
-                    tintOpacity={tint.opacity}
-                    wheelColor={wheel.color}
-                    addons={addonMap}
-                    modelType={model.id}
-                  />
-                </Float>
-                <ContactShadows
-                  position={[0, -0.02, 0]}
-                  opacity={0.55}
-                  scale={14}
-                  blur={2.6}
-                  far={5}
+                <Showroom />
+                <CarModel
+                  spec={car.spec}
+                  shape={car.shape}
+                  bodyColor={color.hex}
+                  tintOpacity={tint.opacity}
+                  wheelColor={wheel.color}
+                  wheelSpokes={wheel.spokes}
+                  addons={addonMap}
                 />
               </Suspense>
 
               <OrbitControls
                 enablePan={false}
-                minPolarAngle={0.4}
+                minPolarAngle={0.3}
                 maxPolarAngle={Math.PI / 2.05}
-                minDistance={6}
-                maxDistance={14}
+                minDistance={5}
+                maxDistance={16}
                 autoRotate
-                autoRotateSpeed={0.6}
+                autoRotateSpeed={0.7}
+                target={[0, 0.1, 0]}
               />
             </Canvas>
 
-            <div className="garage__hint">
-              Sichqoncha bilan aylantiring · g'ildirakda yaqinlashtiring
+            <div className="garage__car-tag">
+              <Car size={15} /> {car.name}
             </div>
-            <button className="garage__reset interactive" onClick={reset}>
-              <RotateCcw size={15} /> Tiklash
-            </button>
+            <div className="garage__hint">
+              Aylantiring · g'ildirakda yaqinlashtiring
+            </div>
+            <div className="garage__viewport-actions">
+              <button
+                className="garage__icon-btn interactive"
+                onClick={reset}
+                title="Tiklash"
+              >
+                <RotateCcw size={16} />
+              </button>
+              <button
+                className="garage__icon-btn interactive"
+                onClick={toggleFullscreen}
+                title={fullscreen ? "Chiqish" : "To'liq ekran"}
+              >
+                {fullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+            </div>
           </div>
 
-          {/* Configurator panel */}
+          {/* Konfigurator paneli */}
           <aside className="garage__panel glass">
             <div className="garage__panel-scroll">
-              {/* Model */}
+              {/* Mashina tanlash */}
               <div className="cfg">
-                <div className="cfg__label">Model</div>
-                <div className="cfg__chips">
-                  {CAR_MODELS.map((m) => (
+                <div className="cfg__label">Mashinani tanlang</div>
+                <div className="cfg__cars">
+                  {UZ_CARS.map((c) => (
                     <button
-                      key={m.id}
-                      className={`chip interactive ${
-                        model.id === m.id ? "chip--active" : ""
+                      key={c.id}
+                      className={`carbtn interactive ${
+                        car.id === c.id ? "carbtn--active" : ""
                       }`}
-                      onClick={() => setModel(m)}
+                      onClick={() => setCar(c)}
                     >
-                      {m.name}
+                      <span className="carbtn__name">{c.name}</span>
+                      <span className="carbtn__price">
+                        {formatPrice(c.basePrice)}
+                      </span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Body color */}
+              {/* Tana rangi */}
               <div className="cfg">
                 <div className="cfg__label">Tana rangi</div>
                 <div className="cfg__colors">
@@ -172,7 +276,12 @@ export default function VirtualGarage() {
                       className={`swatch interactive ${
                         color.id === c.id ? "swatch--active" : ""
                       }`}
-                      style={{ background: c.hex }}
+                      style={{
+                        background: c.hex,
+                        color: ["white", "silver"].includes(c.id)
+                          ? "#111"
+                          : "#fff",
+                      }}
                       onClick={() => setColor(c)}
                       title={`${c.name}${c.price ? " · +" + formatPrice(c.price) : ""}`}
                     >
@@ -183,7 +292,7 @@ export default function VirtualGarage() {
                 <div className="cfg__hint">{color.name}</div>
               </div>
 
-              {/* Tint */}
+              {/* Tonirovka */}
               <div className="cfg">
                 <div className="cfg__label">Tonirovka</div>
                 <div className="cfg__chips">
@@ -201,7 +310,7 @@ export default function VirtualGarage() {
                 </div>
               </div>
 
-              {/* Wheels */}
+              {/* Disklar */}
               <div className="cfg">
                 <div className="cfg__label">Disklar</div>
                 <div className="cfg__chips">
@@ -223,7 +332,7 @@ export default function VirtualGarage() {
                 </div>
               </div>
 
-              {/* Addons */}
+              {/* Tuning */}
               <div className="cfg">
                 <div className="cfg__label">Tuning detallari</div>
                 <div className="cfg__addons">
@@ -248,7 +357,7 @@ export default function VirtualGarage() {
               </div>
             </div>
 
-            {/* Total */}
+            {/* Jami narx */}
             <div className="garage__total">
               <div>
                 <div className="garage__total-label">Umumiy narx</div>
