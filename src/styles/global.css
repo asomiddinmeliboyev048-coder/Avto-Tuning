@@ -1,0 +1,225 @@
+/* ============================================
+   APEX GARAGE — Global Styles & Theme System
+   ============================================ */
+
+:root {
+  /* Brand */
+  --brand: #ff3d3d;
+  --brand-2: #ff8a3d;
+  --brand-gradient: linear-gradient(120deg, #ff3d3d 0%, #ff8a3d 100%);
+  --accent-glow: rgba(255, 61, 61, 0.35);
+
+  /* Fonts */
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Layout */
+  --container: 1280px;
+  --nav-h: 84px;
+}
+
+/* DARK THEME (default) */
+[data-theme='dark'] {
+  --bg: #08080c;
+  --bg-elev: #0f0f16;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #f5f5f7;
+  --text-dim: #a0a0ab;
+  --text-faint: #6b6b76;
+  --glass: rgba(12, 12, 18, 0.6);
+  --grid-line: rgba(255, 255, 255, 0.035);
+}
+
+/* LIGHT THEME */
+[data-theme='light'] {
+  --bg: #f4f4f7;
+  --bg-elev: #ffffff;
+  --bg-card: rgba(0, 0, 0, 0.02);
+  --bg-card-hover: rgba(0, 0, 0, 0.045);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.16);
+  --text: #0c0c12;
+  --text-dim: #4a4a56;
+  --text-faint: #8a8a96;
+  --glass: rgba(255, 255, 255, 0.7);
+  --grid-line: rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.5s var(--ease-in-out), color 0.5s var(--ease-in-out);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-gradient);
+  border-radius: 10px;
+}
+
+/* ---------- Utilities ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  position: relative;
+  padding: 120px 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--brand);
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  margin: 18px 0 16px;
+}
+
+.section-sub {
+  color: var(--text-dim);
+  max-width: 560px;
+  font-size: 1.05rem;
+}
+
+.gradient-text {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.96rem;
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), background 0.3s;
+  will-change: transform;
+}
+.btn-primary {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: 0 10px 40px -10px var(--accent-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 55px -8px var(--accent-glow);
+}
+.btn-ghost {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+}
+.btn-ghost:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+}
+
+/* Glass card */
+.glass {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Reveal helpers (GSAP toggles via class) */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 80px 0;
+  }
+}

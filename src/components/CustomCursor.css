@@ -1,0 +1,51 @@
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+  border-radius: 50%;
+  margin-left: -4px;
+  margin-top: -4px;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--brand);
+}
+
+.cursor-ring {
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  border: 1.5px solid var(--brand);
+  opacity: 0.5;
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo),
+    opacity 0.3s, background 0.3s;
+}
+.cursor-ring--active {
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  opacity: 0.9;
+  background: var(--accent-glow);
+}
+
+/* Hide native cursor only when custom is active and pointer is fine */
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
