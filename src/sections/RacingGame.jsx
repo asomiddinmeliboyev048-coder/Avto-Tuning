@@ -1,11 +1,11 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Html, OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Gamepad2, RotateCcw } from "lucide-react";
 import * as THREE from "three";
 import "./RacingGame.css";
 
-const TRACK_MODEL_PATH = "/models/racingtrack.glb";
+const TRACK_MODEL_PATH = "/models/racing_track.glb";
 const TARGET_CAR_LENGTH = 2.35;
 const STARTING_GRID_CENTER = [0, 0.04, 0];
 const LANE_SPACING = 2.35;
@@ -115,6 +115,45 @@ function SceneLoader() {
     <Html center>
       <div className="race__loading">Race scene yuklanmoqda...</div>
     </Html>
+  );
+}
+
+// 3D modelda xato bo'lsa butun sayt qulamasligi uchun zaxira trassa.
+class TrackErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    if (this.state.hasError) return <FallbackTrack />;
+    return this.props.children;
+  }
+}
+
+function FallbackTrack() {
+  return (
+    <group>
+      {/* asfalt */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 8]} receiveShadow>
+        <planeGeometry args={[14, 60]} />
+        <meshStandardMaterial color="#1c1f26" roughness={0.9} />
+      </mesh>
+      {/* o'rta chiziq */}
+      {Array.from({ length: 16 }).map((_, i) => (
+        <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -6 + i * 3]}>
+          <planeGeometry args={[0.18, 1.4]} />
+          <meshStandardMaterial color="#f4f4f7" emissive="#f4f4f7" emissiveIntensity={0.4} />
+        </mesh>
+      ))}
+      {/* start chizig'i */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -2]}>
+        <planeGeometry args={[7, 0.6]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+    </group>
   );
 }
 
@@ -273,7 +312,9 @@ function RacingScene() {
       <spotLight position={[-8, 10, -6]} intensity={1.4} angle={0.5} penumbra={0.7} />
 
       <Suspense fallback={<SceneLoader />}>
-        <RacingTrack />
+        <TrackErrorBoundary>
+          <RacingTrack />
+        </TrackErrorBoundary>
         {RACE_CARS.map((car) => (
           <RaceCar
             key={car.id}
