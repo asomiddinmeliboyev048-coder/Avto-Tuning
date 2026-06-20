@@ -1,4 +1,5 @@
 import { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import {
@@ -272,6 +273,7 @@ const TABS = [
 ];
 
 export default function VirtualGarage() {
+  const navigate = useNavigate();
   const [carIndex, setCarIndex] = useState(0);
   const [color, setColor] = useState(BODY_COLORS[0]);
   const [tint, setTint] = useState(TINT_LEVELS[1]);
@@ -304,7 +306,7 @@ export default function VirtualGarage() {
   };
 
   const goToRace = () => {
-    document.getElementById("race")?.scrollIntoView({ behavior: "smooth" });
+    navigate("/race");
   };
 
   useEffect(() => {
