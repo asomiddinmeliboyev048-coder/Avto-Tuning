@@ -166,3 +166,27 @@
     display: grid;
   }
 }
+
+
+/* --- Profil avatar tugmasi (Auth) --- */
+.header__profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid var(--border-strong);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+}
+.header__profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px var(--accent-glow);
+}
