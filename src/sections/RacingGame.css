@@ -1,102 +1,284 @@
 .race {
   position: relative;
-  background:
-    radial-gradient(circle at 16% 22%, rgba(61, 107, 255, 0.08), transparent 34%),
-    radial-gradient(circle at 86% 80%, rgba(255, 61, 61, 0.08), transparent 38%);
+  padding-bottom: 90px;
 }
-
 .race__head {
-  max-width: 720px;
-  margin-bottom: 44px;
+  max-width: 640px;
+  margin-bottom: 32px;
 }
 
+/* ---- Sahna ---- */
 .race__stage {
   position: relative;
-  height: min(72vh, 720px);
-  min-height: 520px;
+  width: 100%;
+  height: 82vh;
+  min-height: 560px;
+  max-height: 860px;
   overflow: hidden;
-  border-radius: 28px;
-  background: linear-gradient(180deg, var(--bg-elev), var(--bg));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: #0a0c12;
+  touch-action: none;
 }
-
+.race__stage:fullscreen {
+  height: 100vh;
+  max-height: none;
+}
 .race__stage canvas {
+  position: absolute;
+  inset: 0;
   width: 100% !important;
   height: 100% !important;
 }
-
-.race__loading {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--glass);
-  color: var(--text);
-  font-size: 0.86rem;
+.race__loading,
+.race__error {
+  color: var(--text-dim);
+  font-size: 0.9rem;
   white-space: nowrap;
 }
-
-.race__hud {
+.race__error {
   position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 18px;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #0a0c12;
+}
+
+/* ---- HUD (yuqori) ---- */
+.race__hud-top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 14px;
+  z-index: 6;
   pointer-events: none;
 }
-
-.race__hud > div,
-.race__reset {
-  border: 1px solid var(--border);
+.race__gauge {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
   background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.race__hud > div {
-  padding: 10px 14px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
   border-radius: 14px;
 }
-
-.race__hud-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-faint);
+.race__gauge-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: #fff;
+  min-width: 46px;
+  text-align: right;
+}
+.race__gauge-unit {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.race__pos {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  background: var(--brand-gradient);
+  padding: 8px 16px;
+  border-radius: 14px;
+}
+.race__pos-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #fff;
+}
+.race__pos-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.race__progress {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  overflow: visible;
+}
+.race__progress-bar {
+  height: 100%;
+  background: var(--brand-gradient);
+  border-radius: 10px;
+  transition: width 0.12s linear;
+}
+.race__progress-flag {
+  position: absolute;
+  right: -4px;
+  top: -16px;
+  color: #fff;
 }
 
-.race__hud-value {
-  color: var(--text);
-  font-weight: 700;
+/* ---- Sanoq ---- */
+.race__count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(5rem, 22vw, 14rem);
+  color: #fff;
+  text-shadow: 0 0 60px var(--accent-glow);
+  z-index: 8;
+  pointer-events: none;
+  animation: race-count-pop 1s var(--ease-out-expo) infinite;
+}
+@keyframes race-count-pop {
+  0% { transform: scale(1.4); opacity: 0; }
+  30% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0.6; }
 }
 
-.race__reset {
-  pointer-events: auto;
+/* ---- Overlay (start / natija) ---- */
+.race__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 50%, rgba(10, 12, 18, 0.6), rgba(10, 12, 18, 0.9));
+  backdrop-filter: blur(4px);
+}
+.race__overlay h3 {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+.race__overlay p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.race__overlay-icon {
+  color: var(--brand);
+}
+.race__start {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 14px;
-  border-radius: 14px;
-  color: var(--text);
-  transition:
-    border-color 0.25s,
-    transform 0.25s;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 15px 34px;
+  border-radius: 100px;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 14px 40px -10px var(--accent-glow);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.race__start:hover {
+  transform: translateY(-3px);
+}
+.race__ctrl-hint {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+.race__medal {
+  font-size: 4.5rem;
+  line-height: 1;
 }
 
-.race__reset:hover {
+/* ---- Mobil boshqaruv ---- */
+.race__touch {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+}
+.race__touch-steer {
+  position: absolute;
+  left: 18px;
+  bottom: 22px;
+  display: flex;
+  gap: 12px;
+}
+.race__touch-pedals {
+  position: absolute;
+  right: 18px;
+  bottom: 22px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.race__tbtn {
+  pointer-events: auto;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--glass);
+  border: 1.5px solid var(--border-strong);
+  backdrop-filter: blur(8px);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: transform 0.1s, background 0.15s;
+}
+.race__tbtn:active {
+  transform: scale(0.92);
+  background: rgba(255, 61, 61, 0.4);
+}
+.race__tbtn--gas {
+  width: 86px;
+  height: 86px;
+  background: rgba(34, 197, 139, 0.28);
+  border-color: rgba(34, 197, 139, 0.6);
+}
+.race__tbtn--brake {
+  background: rgba(255, 61, 61, 0.22);
+  border-color: rgba(255, 61, 61, 0.5);
+}
+
+/* ---- To'liq ekran tugmasi ---- */
+.race__fs {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 7;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+}
+.race__hud-top + .race__fs,
+.race__fs {
+  top: 64px;
+}
+.race__fs:hover {
+  color: var(--brand);
   border-color: var(--brand);
-  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .race__stage {
-    min-height: 460px;
-    height: 64vh;
-    border-radius: 20px;
+    height: 90vh;
+    min-height: 480px;
   }
-
-  .race__hud {
-    align-items: flex-end;
+  .race__tbtn {
+    width: 64px;
+    height: 64px;
+  }
+  .race__tbtn--gas {
+    width: 76px;
+    height: 76px;
   }
 }
