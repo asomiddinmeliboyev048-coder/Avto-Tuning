@@ -70,7 +70,15 @@ body {
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
+  cursor: default;
   transition: background 0.5s var(--ease-in-out), color 0.5s var(--ease-in-out);
+}
+
+html,
+body,
+:fullscreen,
+:fullscreen * {
+  cursor: default !important;
 }
 
 h1, h2, h3, h4, h5 {

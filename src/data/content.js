@@ -5,6 +5,7 @@ export const NAV_LINKS = [
   { id: "hero", label: "Bosh sahifa" },
   { id: "process", label: "Jarayon" },
   { id: "garage", label: "Virtual garaj" },
+  { id: "race", label: "Poyga" },
   { id: "parts", label: "Zapchastlar" },
   { id: "contact", label: "Aloqa" },
 ];
