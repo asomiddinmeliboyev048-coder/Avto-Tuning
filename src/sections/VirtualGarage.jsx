@@ -1,7 +1,18 @@
 import { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Html, OrbitControls, useGLTF } from "@react-three/drei";
-import { Car, Check, Maximize2, Minimize2, RotateCcw, Sparkles } from "lucide-react";
+import {
+  Car,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  Play,
+  RotateCcw,
+  RotateCw,
+  Sparkles,
+} from "lucide-react";
 import * as THREE from "three";
 import {
   BODY_COLORS,
@@ -33,21 +44,9 @@ const CARS_CATALOG = [
 ];
 
 const bodyKeys = [
-  "body",
-  "kuzov",
-  "carpaint",
-  "paint",
-  "chassis",
-  "hood",
-  "door",
-  "bumper",
-  "fender",
-  "roof",
-  "bonnet",
-  "trunk",
-  "quarter",
+  "body", "kuzov", "carpaint", "paint", "chassis", "hood", "door",
+  "bumper", "fender", "roof", "bonnet", "trunk", "quarter",
 ];
-
 const glassKeys = ["glass", "oyna", "window", "windshield", "windscreen", "clearglass"];
 const rimKeys = ["rim", "diska", "disc", "wheel_disk", "alloy"];
 const tireKeys = ["tire", "tyre", "rubber", "shina"];
@@ -64,26 +63,21 @@ function includesAny(value, keys) {
 
 function cloneSceneWithOwnMaterials(scene) {
   const clone = scene.clone(true);
-
   clone.traverse((child) => {
     if (!child.isMesh) return;
-
     const meshName = child.name?.toLowerCase() ?? "";
     if (meshName === "cube" || meshName.includes("cube")) {
       child.visible = false;
       return;
     }
-
     child.castShadow = true;
     child.receiveShadow = true;
-
     if (Array.isArray(child.material)) {
       child.material = child.material.map((material) => material.clone());
     } else if (child.material) {
       child.material = child.material.clone();
     }
   });
-
   return clone;
 }
 
@@ -95,20 +89,13 @@ function getNormalizedCarTransform(object) {
   const box = new THREE.Box3().setFromObject(object);
   const size = new THREE.Vector3();
   const center = new THREE.Vector3();
-
   box.getSize(size);
   box.getCenter(center);
-
   const longestHorizontalSide = Math.max(size.x, size.z, 0.001);
   const scale = NORMALIZED_CAR_LENGTH / longestHorizontalSide;
-
   return {
     scale,
-    position: [
-      -center.x * scale,
-      -box.min.y * scale,
-      -center.z * scale,
-    ],
+    position: [-center.x * scale, -box.min.y * scale, -center.z * scale],
   };
 }
 
@@ -117,11 +104,9 @@ class GarageErrorBoundary extends Component {
     super(props);
     this.state = { hasError: false };
   }
-
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-
   render() {
     if (this.state.hasError) return <GarageFallback />;
     return this.props.children;
@@ -164,11 +149,9 @@ function GarageFallback() {
 function GarageModel() {
   const { scene } = useGLTF(GARAGE_MODEL_PATH);
   const garage = useMemo(() => cloneSceneWithOwnMaterials(scene), [scene]);
-
   useEffect(() => {
     garage.traverse((child) => {
       if (!child.isMesh || !child.material) return;
-
       const materials = Array.isArray(child.material) ? child.material : [child.material];
       materials.forEach((material) => {
         material.roughness = Math.max(material.roughness ?? 0.55, 0.42);
@@ -177,15 +160,7 @@ function GarageModel() {
       });
     });
   }, [garage]);
-
-  return (
-    <primitive
-      object={garage}
-      scale={1}
-      position={[0, 0, 0]}
-      rotation={[0, 0, 0]}
-    />
-  );
+  return <primitive object={garage} scale={1} position={[0, 0, 0]} rotation={[0, 0, 0]} />;
 }
 
 function RealCarModel({ modelPath, options }) {
@@ -196,7 +171,6 @@ function RealCarModel({ modelPath, options }) {
   useEffect(() => {
     car.traverse((child) => {
       if (!child.isMesh || !child.material) return;
-
       const meshName = child.name?.toLowerCase() ?? "";
       const materialName = Array.isArray(child.material)
         ? child.material.map((material) => material.name ?? "").join(" ").toLowerCase()
@@ -207,14 +181,10 @@ function RealCarModel({ modelPath, options }) {
         child.visible = false;
         return;
       }
-
       const matchedPart = getMatchedPart(targetName);
-      if (matchedPart) {
-        child.visible = !!options.activeParts[matchedPart];
-      }
+      if (matchedPart) child.visible = !!options.activeParts[matchedPart];
 
       const materials = Array.isArray(child.material) ? child.material : [child.material];
-
       materials.forEach((material) => {
         if (includesAny(targetName, glassKeys)) {
           material.color.set(options.tintColor);
@@ -226,7 +196,6 @@ function RealCarModel({ modelPath, options }) {
           material.needsUpdate = true;
           return;
         }
-
         if (includesAny(targetName, tireKeys)) {
           material.color.set("#101010");
           material.roughness = 0.74;
@@ -234,7 +203,6 @@ function RealCarModel({ modelPath, options }) {
           material.needsUpdate = true;
           return;
         }
-
         if (includesAny(targetName, rimKeys)) {
           material.color.set(options.rimColor);
           material.roughness = 0.28;
@@ -242,7 +210,6 @@ function RealCarModel({ modelPath, options }) {
           material.needsUpdate = true;
           return;
         }
-
         if (includesAny(targetName, bodyKeys)) {
           material.color.set(options.bodyColor);
           material.roughness = 0.24;
@@ -251,7 +218,6 @@ function RealCarModel({ modelPath, options }) {
           if ("clearcoatRoughness" in material) material.clearcoatRoughness = 0.18;
           material.needsUpdate = true;
         }
-
         if (matchedPart && options.activeParts[matchedPart]) {
           material.color.set(options.accentColor);
           material.roughness = 0.3;
@@ -282,50 +248,45 @@ function GarageLighting() {
     <>
       <ambientLight intensity={0.38} color="#d8e4ff" />
       <directionalLight
-        castShadow
-        position={[5, 7, 3]}
-        intensity={1.55}
-        color="#fff2df"
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={30}
-        shadow-camera-left={-8}
-        shadow-camera-right={8}
-        shadow-camera-top={8}
-        shadow-camera-bottom={-8}
+        castShadow position={[5, 7, 3]} intensity={1.55} color="#fff2df"
+        shadow-mapSize-width={2048} shadow-mapSize-height={2048}
+        shadow-camera-near={0.5} shadow-camera-far={30}
+        shadow-camera-left={-8} shadow-camera-right={8}
+        shadow-camera-top={8} shadow-camera-bottom={-8}
       />
       <spotLight
-        castShadow
-        position={[0, 5.8, 1.8]}
-        angle={0.62}
-        penumbra={0.65}
-        intensity={3.4}
-        color="#ffffff"
-        distance={14}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        castShadow position={[0, 5.8, 1.8]} angle={0.62} penumbra={0.65}
+        intensity={3.4} color="#ffffff" distance={14}
+        shadow-mapSize-width={2048} shadow-mapSize-height={2048}
       />
-      <spotLight
-        position={[-3.8, 3.5, -2.5]}
-        angle={0.75}
-        penumbra={0.8}
-        intensity={1.6}
-        color="#9fd7ff"
-        distance={12}
-      />
+      <spotLight position={[-3.8, 3.5, -2.5]} angle={0.75} penumbra={0.8} intensity={1.6} color="#9fd7ff" distance={12} />
     </>
   );
 }
 
+const TABS = [
+  { id: "rang", label: "Rang" },
+  { id: "disk", label: "Disk" },
+  { id: "tint", label: "Tonirovka" },
+  { id: "tuning", label: "Tuning" },
+];
+
 export default function VirtualGarage() {
-  const [car, setCar] = useState(CARS_CATALOG[0]);
+  const [carIndex, setCarIndex] = useState(0);
   const [color, setColor] = useState(BODY_COLORS[0]);
   const [tint, setTint] = useState(TINT_LEVELS[1]);
   const [wheel, setWheel] = useState(WHEEL_OPTIONS[0]);
   const [addons, setAddons] = useState({});
   const [fullscreen, setFullscreen] = useState(false);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const [tab, setTab] = useState("rang");
   const stageRef = useRef(null);
+
+  const car = CARS_CATALOG[carIndex];
+  const carCount = CARS_CATALOG.length;
+
+  const prevCar = () => setCarIndex((i) => (i - 1 + carCount) % carCount);
+  const nextCar = () => setCarIndex((i) => (i + 1) % carCount);
 
   const reset = () => {
     setColor(BODY_COLORS[0]);
@@ -334,28 +295,24 @@ export default function VirtualGarage() {
     setAddons({});
   };
 
-  const toggleAddon = (id) => {
-    setAddons((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  const toggleAddon = (id) => setAddons((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const toggleFullscreen = () => {
     const element = stageRef.current;
-    if (!document.fullscreenElement) {
-      element?.requestFullscreen?.().catch(() => {});
-    } else {
-      document.exitFullscreen?.();
-    }
+    if (!document.fullscreenElement) element?.requestFullscreen?.().catch(() => {});
+    else document.exitFullscreen?.();
+  };
+
+  const goToRace = () => {
+    document.getElementById("race")?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     const onChange = () => {
       setFullscreen(!!document.fullscreenElement);
-      if (document.pointerLockElement) {
-        document.exitPointerLock?.();
-      }
+      if (document.pointerLockElement) document.exitPointerLock?.();
       document.body.classList.remove("has-custom-cursor");
     };
-
     document.addEventListener("fullscreenchange", onChange);
     document.addEventListener("pointerlockchange", onChange);
     return () => {
@@ -392,170 +349,197 @@ export default function VirtualGarage() {
             <Sparkles size={14} /> Virtual garaj
           </span>
           <h2 className="section-title">
-            Real 3D mashinani <span className="gradient-text">jonli tuning</span> qiling
+            Mashinangizni <span className="gradient-text">jonli tuning</span> qiling
           </h2>
           <p className="section-sub">
-            Eski tekis ikonlar o'rniga haqiqiy GLB avtomobillar ishlaydi. Rang,
-            tonirovka va disk sozlamalari faqat mashinaga qo'llanadi, garaj muhiti
-            alohida qoladi.
+            Strelkalar bilan mashinani almashtiring, 360° aylantiring, rang va
+            disklarni sozlang — keyin “Poyga” tugmasi bilan trassaga chiqing.
           </p>
         </div>
+      </div>
 
-        <div
-          className={`garage__stage ${fullscreen ? "garage__stage--fs" : ""}`}
-          ref={stageRef}
+      {/* To'liq kenglikdagi o'yin uslubidagi sahna */}
+      <div className={`garage__stage ${fullscreen ? "garage__stage--fs" : ""}`} ref={stageRef}>
+        <Canvas
+          shadows dpr={[1, 2]}
+          camera={{ position: [4.6, 2.1, 5.4], fov: 42, near: 0.1, far: 120 }}
+          gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping }}
+          onCreated={({ gl }) => {
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+            gl.toneMappingExposure = 1.08;
+            gl.shadowMap.enabled = true;
+            gl.shadowMap.type = THREE.PCFSoftShadowMap;
+            gl.domElement.style.cursor = "default";
+          }}
         >
-          <div className="garage__viewport">
-            <Canvas
-              shadows
-              dpr={[1, 2]}
-              camera={{ position: [4.2, 2.25, 5.2], fov: 43, near: 0.1, far: 120 }}
-              gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping }}
-              onCreated={({ gl }) => {
-                gl.outputColorSpace = THREE.SRGBColorSpace;
-                gl.toneMappingExposure = 1.08;
-                gl.shadowMap.enabled = true;
-                gl.shadowMap.type = THREE.PCFSoftShadowMap;
-                gl.domElement.style.cursor = "default";
-              }}
-            >
-              <color attach="background" args={["#15171a"]} />
-              <GarageLighting />
+          <color attach="background" args={["#15171a"]} />
+          <GarageLighting />
+          <Suspense fallback={<CanvasLoader />}>
+            <GarageErrorBoundary>
+              <GarageModel />
+            </GarageErrorBoundary>
+            <RealCarModel modelPath={car.path} options={options} />
+            <Environment preset="warehouse" background={false} />
+            <ContactShadows position={[0, 0.02, 0]} opacity={0.42} scale={8} blur={2.4} far={2.5} />
+          </Suspense>
 
-              <Suspense fallback={<CanvasLoader />}>
-                <GarageErrorBoundary>
-                  <GarageModel />
-                </GarageErrorBoundary>
-                <RealCarModel modelPath={car.path} options={options} />
-                <Environment preset="warehouse" background={false} />
-                <ContactShadows position={[0, 0.02, 0]} opacity={0.42} scale={8} blur={2.4} far={2.5} />
-              </Suspense>
+          {/* Kamera qulflangan: garajdan tashqariga chiqmaydi, pol ostiga tushmaydi */}
+          <OrbitControls
+            target={[0, 0.55, 0]}
+            enablePan={false}
+            autoRotate={autoRotate}
+            autoRotateSpeed={0.9}
+            minPolarAngle={0.18}
+            maxPolarAngle={Math.PI / 2 - 0.05}
+            minDistance={3}
+            maxDistance={6.4}
+            enableDamping
+            dampingFactor={0.08}
+          />
+        </Canvas>
 
-              <OrbitControls
-                target={[0, 0.35, 0]}
-                maxPolarAngle={Math.PI / 2 - 0.04}
-                minDistance={2.4}
-                maxDistance={9}
-                enableDamping
-                dampingFactor={0.08}
-              />
-            </Canvas>
+        {/* Yuqori chap: mashina nomi */}
+        <div className="garage__car-tag">
+          <Car size={15} /> {car.name}
+        </div>
 
-            <div className="garage__car-tag">
-              <Car size={15} /> {car.name}
+        {/* Yuqori o'ng: amallar */}
+        <div className="garage__viewport-actions">
+          <button
+            className={`garage__icon-btn interactive ${autoRotate ? "is-on" : ""}`}
+            onClick={() => setAutoRotate((v) => !v)}
+            title="360° avto-aylanish"
+          >
+            <RotateCw size={16} />
+          </button>
+          <button className="garage__icon-btn interactive" onClick={reset} title="Tiklash">
+            <RotateCcw size={16} />
+          </button>
+          <button
+            className="garage__icon-btn interactive"
+            onClick={toggleFullscreen}
+            title={fullscreen ? "Chiqish" : "To'liq ekran"}
+          >
+            {fullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
+        </div>
+
+        {/* O'yin uslubidagi mashina almashtirish strelkalari */}
+        <button className="garage__nav garage__nav--prev interactive" onClick={prevCar} aria-label="Oldingi mashina">
+          <ChevronLeft size={30} />
+        </button>
+        <button className="garage__nav garage__nav--next interactive" onClick={nextCar} aria-label="Keyingi mashina">
+          <ChevronRight size={30} />
+        </button>
+
+        {/* Pastki ixcham boshqaruv dock */}
+        <div className="garage__dock glass">
+          {/* Mashina almashtirgich + narx + indikator */}
+          <div className="dock__carline">
+            <button className="dock__navmini interactive" onClick={prevCar}>
+              <ChevronLeft size={18} />
+            </button>
+            <div className="dock__carinfo">
+              <span className="dock__carname">{car.name}</span>
+              <span className="dock__carprice">{formatPrice(car.basePrice)}</span>
             </div>
-            <div className="garage__hint">Aylantiring · g'ildirakda yaqinlashtiring</div>
-            <div className="garage__viewport-actions">
-              <button className="garage__icon-btn interactive" onClick={reset} title="Tiklash">
-                <RotateCcw size={16} />
-              </button>
-              <button
-                className="garage__icon-btn interactive"
-                onClick={toggleFullscreen}
-                title={fullscreen ? "Chiqish" : "To'liq ekran"}
-              >
-                {fullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-              </button>
-            </div>
+            <button className="dock__navmini interactive" onClick={nextCar}>
+              <ChevronRight size={18} />
+            </button>
+            <span className="dock__counter">
+              {carIndex + 1}/{carCount}
+            </span>
           </div>
 
-          <aside className="garage__panel glass">
-            <div className="garage__panel-scroll">
-              <div className="cfg">
-                <div className="cfg__label">Mashinani tanlang</div>
-                <div className="cfg__cars">
-                  {CARS_CATALOG.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`carbtn interactive ${car.id === item.id ? "carbtn--active" : ""}`}
-                      onClick={() => setCar(item)}
-                    >
-                      <span className="carbtn__name">{item.name}</span>
-                      <span className="carbtn__price">{formatPrice(item.basePrice)}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
+          {/* Tablar */}
+          <div className="dock__tabs">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                className={`dock__tab interactive ${tab === t.id ? "is-active" : ""}`}
+                onClick={() => setTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
 
-              <div className="cfg">
-                <div className="cfg__label">Kuzov rangi</div>
-                <div className="cfg__colors">
-                  {BODY_COLORS.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`swatch interactive ${color.id === item.id ? "swatch--active" : ""}`}
-                      style={{
-                        background: item.hex,
-                        color: ["white", "silver"].includes(item.id) ? "#111" : "#fff",
-                      }}
-                      onClick={() => setColor(item)}
-                      title={`${item.name}${item.price ? " · +" + formatPrice(item.price) : ""}`}
-                    >
-                      {color.id === item.id && <Check size={16} />}
-                    </button>
-                  ))}
-                </div>
-                <div className="cfg__hint">{color.name}</div>
+          {/* Tab kontenti */}
+          <div className="dock__content">
+            {tab === "rang" && (
+              <div className="dock__swatches">
+                {BODY_COLORS.map((item) => (
+                  <button
+                    key={item.id}
+                    className={`swatch interactive ${color.id === item.id ? "swatch--active" : ""}`}
+                    style={{ background: item.hex }}
+                    onClick={() => setColor(item)}
+                    title={item.name}
+                  >
+                    {color.id === item.id && <Check size={15} color={["white", "silver"].includes(item.id) ? "#111" : "#fff"} />}
+                  </button>
+                ))}
               </div>
+            )}
 
-              <div className="cfg">
-                <div className="cfg__label">Tonirovka</div>
-                <div className="cfg__chips">
-                  {TINT_LEVELS.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`chip interactive ${tint.id === item.id ? "chip--active" : ""}`}
-                      onClick={() => setTint(item)}
-                    >
-                      {item.name}
-                    </button>
-                  ))}
-                </div>
+            {tab === "disk" && (
+              <div className="dock__chips">
+                {WHEEL_OPTIONS.map((item) => (
+                  <button
+                    key={item.id}
+                    className={`chip interactive ${wheel.id === item.id ? "chip--active" : ""}`}
+                    onClick={() => setWheel(item)}
+                  >
+                    <span className="chip__dot" style={{ background: item.color }} />
+                    {item.name}
+                  </button>
+                ))}
               </div>
+            )}
 
-              <div className="cfg">
-                <div className="cfg__label">Disklar</div>
-                <div className="cfg__chips">
-                  {WHEEL_OPTIONS.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`chip interactive ${wheel.id === item.id ? "chip--active" : ""}`}
-                      onClick={() => setWheel(item)}
-                    >
-                      <span className="chip__dot" style={{ background: item.color }} />
-                      {item.name}
-                    </button>
-                  ))}
-                </div>
+            {tab === "tint" && (
+              <div className="dock__chips">
+                {TINT_LEVELS.map((item) => (
+                  <button
+                    key={item.id}
+                    className={`chip interactive ${tint.id === item.id ? "chip--active" : ""}`}
+                    onClick={() => setTint(item)}
+                  >
+                    {item.name}
+                  </button>
+                ))}
               </div>
+            )}
 
-              <div className="cfg">
-                <div className="cfg__label">Tuning detallari</div>
-                <div className="cfg__addons">
-                  {TUNING_ADDONS.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`addon interactive ${addons[item.id] ? "addon--active" : ""}`}
-                      onClick={() => toggleAddon(item.id)}
-                    >
-                      <span className="addon__check">{addons[item.id] && <Check size={14} />}</span>
-                      <span className="addon__name">{item.name}</span>
-                      <span className="addon__price">+{formatPrice(item.price)}</span>
-                    </button>
-                  ))}
-                </div>
+            {tab === "tuning" && (
+              <div className="dock__chips">
+                {TUNING_ADDONS.map((item) => (
+                  <button
+                    key={item.id}
+                    className={`chip interactive ${addons[item.id] ? "chip--active" : ""}`}
+                    onClick={() => toggleAddon(item.id)}
+                  >
+                    {addons[item.id] && <Check size={13} />}
+                    {item.name} · +{formatPrice(item.price)}
+                  </button>
+                ))}
               </div>
+            )}
+          </div>
+
+          {/* Pastki qator: narx + tugmalar */}
+          <div className="dock__footer">
+            <div className="dock__total">
+              <span className="dock__total-label">Jami</span>
+              <span className="dock__total-value gradient-text">{formatPrice(total)}</span>
             </div>
-
-            <div className="garage__total">
-              <div>
-                <div className="garage__total-label">Umumiy narx</div>
-                <div className="garage__total-value gradient-text">{formatPrice(total)}</div>
-              </div>
-              <button className="btn btn-primary interactive">Buyurtma berish</button>
-            </div>
-          </aside>
+            <button className="dock__play interactive" onClick={goToRace}>
+              <Play size={18} fill="#fff" /> Poyga
+            </button>
+          </div>
         </div>
+
+        <div className="garage__hint">Aylantiring · g'ildirakda yaqinlashtiring · ‹ › bilan mashina almashtiring</div>
       </div>
     </section>
   );
