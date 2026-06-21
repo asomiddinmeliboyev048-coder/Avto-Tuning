@@ -15,9 +15,39 @@ const firebaseConfig = {
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+let app = null;
+let auth = null;
+let db = null;
+let rtdb = null;
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const rtdb = getDatabase(app);
+try {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+} catch (e) {
+  console.error("Firebase init xatosi:", e?.message);
+}
+
+// getAuth noto'g'ri/yo'q apiKey bilan xato tashlaydi — uni ushlaymiz,
+// shunda butun sayt oq bo'lib qolmaydi.
+try {
+  if (app) auth = getAuth(app);
+} catch (e) {
+  console.error(
+    "⚠️ Firebase Auth ishga tushmadi. .env.local dagi VITE_FIREBASE_API_KEY ni tekshiring:",
+    e?.message,
+  );
+}
+try {
+  if (app) db = getFirestore(app);
+} catch (e) {
+  console.error("Firestore init xatosi:", e?.message);
+}
+try {
+  if (app) rtdb = getDatabase(app);
+} catch (e) {
+  console.error("Realtime DB init xatosi:", e?.message);
+}
+
+// Auth sozlanganmi (kalit to'g'rimi) — UI shu orqali ogohlantirishi mumkin.
+export const isFirebaseReady = !!auth;
+export { auth, db, rtdb };
 export default app;
