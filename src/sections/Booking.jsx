@@ -8,14 +8,11 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { UZ_CARS } from "../data/content.js";
 import "./Booking.css";
 
-const SERVICES = [
-  "Tonirovka", "Body-kit montaj", "Disk & shina", "Chip-tuning",
-  "Polirovka / Keramika", "Sport vyxlop", "Salon kimyoviy tozalash", "Boshqa",
-];
+const SERVICE_HINT = "Tonirovka, Body-kit, Disk almashtirish, Chip-tuning...";
 
 export default function Booking() {
   const { user, profile } = useAuth();
-  const [form, setForm] = useState({ name: "", phone: "", service: SERVICES[0], car: "", note: "" });
+  const [form, setForm] = useState({ name: "", phone: "", service: "", car: "", note: "" });
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
@@ -89,9 +86,7 @@ export default function Booking() {
               <div className="booking__field"><label>Telefon</label><input value={form.phone} onChange={set("phone")} placeholder="+998 .. ... .. .." /></div>
               <div className="booking__field">
                 <label>Xizmat turi</label>
-                <select value={form.service} onChange={set("service")}>
-                  {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
+                <input value={form.service} onChange={set("service")} placeholder={SERVICE_HINT} />
               </div>
               <div className="booking__field">
                 <label>Joriy mashina</label>

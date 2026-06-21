@@ -11,7 +11,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, useGLTF } from "@react-three/drei";
 import {
   ArrowLeft, Play, RotateCcw, Trophy, Flag,
-  ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+  ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Volume2, VolumeX,
 } from "lucide-react";
 import * as THREE from "three";
 import "./RaceArena.css";
@@ -55,33 +55,34 @@ function normalizedCarTransform(object) {
   box.getSize(size); box.getCenter(center);
   const longest = Math.max(size.x, size.z, 0.001);
   const scale = TARGET_CAR_LENGTH / longest;
-  return { scale, position: [-center.x * scale, -box.min.y * scale, -center.z * scale] };
+  return { scale, position: [-center.x * scale, -box.min.y * scale, -center.z * scale], lengthAlongX: size.x > size.z };
 }
 // kuzatuv: jahon yo'nalish vektoridan heading
 const headingFromDir = (dx, dz) => Math.atan2(dx, -dz);
 
 /* ----------------- Chuqur dvigatel ovozi (WebAudio) ----------------- */
 class EngineAudio {
-  constructor() { this.ctx = null; this.ready = false; }
+  constructor() { this.ctx = null; this.ready = false; this.muted = false; }
   init() {
     if (this.ctx) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     const ctx = new Ctx(); this.ctx = ctx;
     this.master = ctx.createGain(); this.master.gain.value = 0;
-    this.lp = ctx.createBiquadFilter(); this.lp.type = "lowpass"; this.lp.frequency.value = 600; this.lp.Q.value = 7;
+    this.lp = ctx.createBiquadFilter(); this.lp.type = "lowpass"; this.lp.frequency.value = 520; this.lp.Q.value = 5;
     this.lp.connect(this.master); this.master.connect(ctx.destination);
     const mk = (type, gain) => { const o = ctx.createOscillator(); o.type = type; const g = ctx.createGain(); g.gain.value = gain; o.connect(g).connect(this.lp); o.start(); return o; };
-    this.o1 = mk("sawtooth", 0.17);
-    this.o2 = mk("sawtooth", 0.12);
-    this.o3 = mk("triangle", 0.22);
+    this.o1 = mk("sawtooth", 0.10);
+    this.o2 = mk("sawtooth", 0.07);
+    this.o3 = mk("triangle", 0.14);
     const buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
     const d = buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     this.noise = buf;
     this.ready = true;
   }
   resume() { this.ctx?.resume?.(); }
-  startEngine() { if (!this.ready) return; this.resume(); this.master.gain.setTargetAtTime(0.55, this.ctx.currentTime, 0.12); this.rev(); }
+  setMuted(m) { this.muted = m; if (this.ready) this.master.gain.setTargetAtTime(m ? 0.0001 : 0.32, this.ctx.currentTime, 0.1); }
+  startEngine() { if (!this.ready) return; this.resume(); this.master.gain.setTargetAtTime(this.muted ? 0.0001 : 0.32, this.ctx.currentTime, 0.12); this.rev(); }
   stopEngine() { if (!this.ready) return; this.master.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.3); }
   rev() {
     if (!this.ready) return;
@@ -105,13 +106,13 @@ class EngineAudio {
     this.lp.frequency.setTargetAtTime(420 + norm * 1500 + (throttle ? 280 : 0), t, 0.1);
   }
   brakeDrop() {
-    if (!this.ready) return;
+    if (!this.ready || this.muted) return;
     const t = this.ctx.currentTime;
     [this.o1, this.o2, this.o3].forEach((o, i) => { o.frequency.cancelScheduledValues(t); o.frequency.setTargetAtTime(i === 2 ? 26 : 52, t, 0.12); });
     this.screech();
   }
   screech() {
-    if (!this.ready) return;
+    if (!this.ready || this.muted) return;
     const t = this.ctx.currentTime;
     const src = this.ctx.createBufferSource(); src.buffer = this.noise;
     const hp = this.ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 1600;
@@ -227,7 +228,7 @@ function CarModel({ car, registerRef }) {
   }, [car.color, model]);
   return (
     <group ref={registerRef}>
-      <group rotation={[0, CAR_FACING, 0]}>
+      <group rotation={[0, CAR_FACING + (transform.lengthAlongX ? Math.PI / 2 : 0) + (car.yawAdj || 0), 0]}>
         <primitive object={model} scale={transform.scale} position={transform.position} />
       </group>
     </group>
@@ -368,6 +369,9 @@ export default function RaceArena() {
   const [hud, setHud] = useState({ speed: 0, progress: 0, position: 1, lap: 1 });
   const [raceKey, setRaceKey] = useState(0);
   const [isTouch, setIsTouch] = useState(false);
+  const [muted, setMuted] = useState(false);
+
+  const toggleMute = () => setMuted((m) => { const nv = !m; audioRef.current?.setMuted(nv); return nv; });
 
   const controlsRef = useRef({ up: false, down: false, left: false, right: false });
   const telemetryRef = useRef({ speed: 0, progress: 0, position: 1, lap: 1 });
@@ -453,6 +457,9 @@ export default function RaceArena() {
       </Canvas>
 
       <button className="arena__back" onClick={() => navigate("/")}><ArrowLeft size={18} /> Chiqish</button>
+      <button className="arena__mute" onClick={toggleMute} aria-label="Ovoz" title={muted ? "Ovozni yoqish" : "Ovozsiz"}>
+        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+      </button>
 
       {(gameState === "racing" || gameState === "countdown") && (
         <div className="arena__hud">
