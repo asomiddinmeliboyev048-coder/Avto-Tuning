@@ -7,8 +7,10 @@ import Loader from "./components/Loader.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import CartDrawer from "./components/cart/CartDrawer.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
+import Shop from "./pages/Shop.jsx";
 import RaceArena from "./pages/RaceArena.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,7 +25,6 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Poyga arenasi — to'liq ekran, header/footer/loader yo'q
   if (isRace) {
     return (
       <Routes>
@@ -42,9 +43,11 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/dokon" element={<Shop />} />
           </Routes>
         </main>
         <Footer />
+        <CartDrawer />
       </div>
     </>
   );

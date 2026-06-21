@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
-import { Sun, Moon, Menu, X, User } from "lucide-react";
+import { Sun, Moon, Menu, X, User, ShoppingCart, Store } from "lucide-react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 import { NAV_LINKS } from "../data/content.js";
 import AuthModal from "./auth/AuthModal.jsx";
 import "./Header.css";
@@ -11,6 +12,7 @@ import "./Header.css";
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const { user, profile } = useAuth();
+  const { count, setOpen } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -109,6 +111,23 @@ export default function Header() {
               aria-label="Mavzuni almashtirish"
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <button
+              className="header__theme interactive"
+              onClick={() => navigate("/dokon")}
+              aria-label="Dokon"
+            >
+              <Store size={18} />
+            </button>
+
+            <button
+              className="header__theme header__cart interactive"
+              onClick={() => setOpen(true)}
+              aria-label="Savat"
+            >
+              <ShoppingCart size={18} />
+              {count > 0 && <span className="header__cart-badge">{count}</span>}
             </button>
 
             {user ? (
