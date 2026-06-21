@@ -1,5 +1,5 @@
-.vu { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(6px); }
-.vu__card { position: relative; width: 100%; max-width: 440px; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: 22px; padding: 28px 24px; max-height: 92vh; overflow-y: auto; }
+.vu { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: flex-start; justify-content: center; padding: 24px; overflow-y: auto; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(6px); }
+.vu__card { position: relative; width: 100%; max-width: 440px; margin: auto; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: 22px; padding: 28px 24px; }
 .vu__close { position: absolute; top: 14px; right: 14px; color: var(--text-dim); }
 .vu__title { font-size: 1.3rem; margin-bottom: 18px; }
 .vu__tabs { display: flex; gap: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 5px; margin-bottom: 16px; }
