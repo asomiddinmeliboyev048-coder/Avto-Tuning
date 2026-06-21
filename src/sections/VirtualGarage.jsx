@@ -547,4 +547,6 @@ export default function VirtualGarage() {
   );
 }
 
-CARS_CATALOG.forEach((car) => useGLTF.preload(car.path));
+// Eslatma: 14 ta mashinani bir vaqtda preload qilmaymiz (WebGL/xotira yukini
+// kamaytirish uchun) — har bir mashina tanlanганда lazy yuklanadi.
+
