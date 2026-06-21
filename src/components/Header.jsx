@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import gsap from "gsap";
 import { Sun, Moon, Menu, X, User, ShoppingCart, Store, Wrench, Video } from "lucide-react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -22,20 +21,8 @@ export default function Header() {
   const headerRef = useRef(null);
   const navItemsRef = useRef([]);
 
-  // Intro reveal animation
-  useEffect(() => {
-    const tl = gsap.timeline({ delay: 2.9 });
-    tl.from(headerRef.current, {
-      yPercent: -120,
-      duration: 1,
-      ease: "power4.out",
-    }).from(
-      navItemsRef.current,
-      { y: -20, opacity: 0, stagger: 0.06, duration: 0.6, ease: "power3.out" },
-      "-=0.5",
-    );
-    return () => tl.kill();
-  }, []);
+  // (Kirish animatsiyasi olib tashlandi — header doimo ko'rinadi,
+  //  GSAP "from" yashirin holatда qotirib qo'ymasin.)
 
   // Scroll state + active section spy
   useEffect(() => {
