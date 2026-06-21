@@ -4,6 +4,7 @@ import Process from "./sections/Process.jsx";
 import VirtualGarage from "./sections/VirtualGarage.jsx";
 import RacingGame from "./sections/RacingGame.jsx";
 import Parts from "./sections/Parts.jsx";
+import Booking from "./sections/Booking.jsx";
 
 export default function Landing() {
   return (
@@ -13,6 +14,7 @@ export default function Landing() {
       <VirtualGarage />
       <RacingGame />
       <Parts />
+      <Booking />
     </>
   );
 }
