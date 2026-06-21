@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
-import { Sun, Moon, Menu, X, User, ShoppingCart, Store, Wrench } from "lucide-react";
+import { Sun, Moon, Menu, X, User, ShoppingCart, Store, Wrench, Video } from "lucide-react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
@@ -128,6 +128,14 @@ export default function Header() {
               title="Mashinamni tamirlamoqchiman"
             >
               <Wrench size={18} />
+            </button>
+
+            <button
+              className="header__theme interactive"
+              onClick={() => navigate("/videolar")}
+              aria-label="Videolar"
+            >
+              <Video size={18} />
             </button>
 
             <button

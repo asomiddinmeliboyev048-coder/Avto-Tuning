@@ -11,6 +11,8 @@ import CartDrawer from "./components/cart/CartDrawer.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
 import Shop from "./pages/Shop.jsx";
+import Videos from "./pages/Videos.jsx";
+import VideoDetail from "./pages/VideoDetail.jsx";
 import RaceArena from "./pages/RaceArena.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -44,6 +46,8 @@ export default function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/dokon" element={<Shop />} />
+            <Route path="/videolar" element={<Videos />} />
+            <Route path="/videolar/:id" element={<VideoDetail />} />
           </Routes>
         </main>
         <Footer />

@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
-import { Camera, LogOut, Save, Loader2 } from "lucide-react";
+import { Camera, LogOut, Save, Loader2, Video } from "lucide-react";
 import { db } from "../lib/firebase.js";
 import { uploadFile } from "../lib/supabase.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UZ_CARS } from "../data/content.js";
+import VideoUpload from "../components/video/VideoUpload.jsx";
 import "./Profile.css";
 
 export default function Profile() {
@@ -19,6 +20,7 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState("");
+  const [showUpload, setShowUpload] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate("/");
@@ -145,7 +147,20 @@ export default function Profile() {
             {saving ? "Saqlanmoqda..." : "Saqlash"}
           </button>
         </div>
+
+        <div className="profile__form glass">
+          <h3>Video yuklash</h3>
+          <p style={{ color: "var(--text-dim)", fontSize: "0.9rem", marginBottom: 16 }}>
+            YouTube havolasi yoki galereyadan video qo'shing. Video admin tasdig'idan
+            o'tgach “Videolar” bo'limida ko'rinadi.
+          </p>
+          <button className="btn btn-primary" style={{ alignSelf: "flex-start" }} onClick={() => setShowUpload(true)}>
+            <Video size={18} /> Video yuklash
+          </button>
+        </div>
       </div>
+
+      <VideoUpload open={showUpload} onClose={() => setShowUpload(false)} />
     </section>
   );
 }

@@ -1,0 +1,40 @@
+.vd { padding-top: calc(var(--nav-h) + 20px); min-height: 100vh; }
+.vd__wrap { max-width: 860px; }
+.vd__loading { min-height: 100vh; display: grid; place-items: center; color: var(--text-dim); gap: 12px; }
+
+.vd__back { display: inline-flex; align-items: center; gap: 8px; color: var(--text-dim); margin-bottom: 16px; font-weight: 600; }
+.vd__back:hover { color: var(--brand); }
+
+.vd__player { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 16px; overflow: hidden; }
+.vd__player iframe, .vd__player video { position: absolute; inset: 0; width: 100%; height: 100%; border: none; object-fit: cover; }
+.vd__novid { display: grid; place-items: center; height: 100%; color: var(--text-dim); }
+
+.vd__info { padding: 18px 2px; border-bottom: 1px solid var(--border); }
+.vd__info h1 { font-size: 1.4rem; margin-bottom: 12px; }
+.vd__stats { display: flex; align-items: center; gap: 18px; color: var(--text-dim); font-size: 0.9rem; }
+.vd__stats span { display: inline-flex; align-items: center; gap: 6px; }
+.vd__like { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 100px; background: var(--bg-card); border: 1px solid var(--border-strong); color: var(--text); font-weight: 600; }
+.vd__like.is-on { color: var(--brand); border-color: var(--brand); }
+.vd__author { margin-left: auto; font-weight: 600; color: var(--text); }
+
+.vd__comments { padding-top: 20px; }
+.vd__comments h3 { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; margin-bottom: 16px; }
+
+.vd__av { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; background: var(--brand-gradient) center/cover; display: grid; place-items: center; color: #fff; font-weight: 700; }
+.vd__addc { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.vd__addc input { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; color: var(--text); padding: 12px 18px; outline: none; font-family: inherit; }
+.vd__addc input:focus { border-color: var(--brand); }
+.vd__addc button { color: var(--brand); }
+.vd__addc--reply { margin-top: 10px; }
+.vd__addc--reply input { padding: 10px 14px; font-size: 0.88rem; }
+
+.vd__c { display: flex; gap: 12px; margin-bottom: 16px; }
+.vd__c--reply { margin-bottom: 10px; }
+.vd__c--reply .vd__av { width: 32px; height: 32px; font-size: 0.8rem; }
+.vd__c-body { flex: 1; min-width: 0; }
+.vd__c-name { font-weight: 600; font-size: 0.88rem; }
+.vd__c-text { font-size: 0.92rem; color: var(--text); margin: 2px 0 6px; line-height: 1.5; word-break: break-word; }
+.vd__c-actions { display: flex; gap: 16px; }
+.vd__c-actions button { display: inline-flex; align-items: center; gap: 5px; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; }
+.vd__c-actions button.is-on { color: var(--brand); }
+.vd__replies { margin-top: 12px; padding-left: 14px; border-left: 2px solid var(--border); }
