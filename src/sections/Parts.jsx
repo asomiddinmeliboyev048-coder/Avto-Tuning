@@ -64,6 +64,7 @@ export default function Parts() {
   const root = useRef(null);
   const [cat, setCat] = useState("Barchasi");
   const [rimColor, setRimColor] = useState(WHEEL_OPTIONS[1].color);
+  const [show3D, setShow3D] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -119,8 +120,16 @@ export default function Parts() {
         {/* Featured 3D + info */}
         <div className="parts__featured glass">
           <div className="parts__featured-3d">
-            <PartShowcase3D color={rimColor} />
-            <div className="parts__featured-badge">3D · 360° aylantiriladi</div>
+            {show3D ? (
+              <>
+                <PartShowcase3D color={rimColor} />
+                <div className="parts__featured-badge">3D · 360° aylantiriladi</div>
+              </>
+            ) : (
+              <button className="parts__load3d" onClick={() => setShow3D(true)}>
+                ▶ 3D diskni ko&apos;rish
+              </button>
+            )}
           </div>
           <div className="parts__featured-info">
             <span className="pstep__tag">Tavsiya etiladi</span>

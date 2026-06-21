@@ -283,6 +283,7 @@ export default function VirtualGarage() {
   const [fullscreen, setFullscreen] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [tab, setTab] = useState("rang");
+  const [show3D, setShow3D] = useState(false);
   const stageRef = useRef(null);
 
   const car = CARS_CATALOG[carIndex];
@@ -365,12 +366,19 @@ export default function VirtualGarage() {
 
       {/* To'liq kenglikdagi o'yin uslubidagi sahna */}
       <div className={`garage__stage ${fullscreen ? "garage__stage--fs" : ""}`} ref={stageRef}>
-        {!webgl && (
+        {!show3D && (
+          <button className="garage__loadbtn" onClick={() => setShow3D(true)}>
+            <Play size={28} fill="#fff" />
+            <span>3D garajni ochish</span>
+            <small>Mashinani 360° aylantiring, rang va disklarni sozlang</small>
+          </button>
+        )}
+        {show3D && !webgl && (
           <div className="garage__webgl-off">
             ⚠️ 3D ko&apos;rinishi uchun brauzerда “Hardware acceleration”ni yoqing va sahifani yangilang.
           </div>
         )}
-        {webgl && <Canvas
+        {show3D && webgl && <Canvas
           shadows dpr={[1, 2]}
           camera={{ position: [4.6, 2.1, 5.4], fov: 42, near: 0.1, far: 120 }}
           gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping }}
