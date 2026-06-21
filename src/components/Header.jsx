@@ -192,6 +192,9 @@ export default function Header() {
               {link.label}
             </button>
           ))}
+          <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/dokon"); }}>Dokon</button>
+          <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/videolar"); }}>Videolar</button>
+          <button className="header__mobile-link" onClick={() => go("booking")}>Tamirlash — navbat olish</button>
           {user ? (
             <button
               className="header__mobile-link"
