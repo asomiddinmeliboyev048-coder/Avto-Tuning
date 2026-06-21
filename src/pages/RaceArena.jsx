@@ -16,6 +16,8 @@ import {
 import * as THREE from "three";
 import "./RaceArena.css";
 
+import { hasWebGL } from "../lib/webgl.js";
+
 /* ----------------------------- Pista o'lchamlari ----------------------------- */
 const R_IN = 26;            // ichki devor radiusi
 const R_OUT = 44;           // tashqi devor radiusi
@@ -371,6 +373,8 @@ export default function RaceArena() {
   const [isTouch, setIsTouch] = useState(false);
   const [muted, setMuted] = useState(false);
 
+  const webgl = useMemo(() => hasWebGL(), []);
+
   const toggleMute = () => setMuted((m) => { const nv = !m; audioRef.current?.setMuted(nv); return nv; });
 
   const controlsRef = useRef({ up: false, down: false, left: false, right: false });
@@ -440,7 +444,14 @@ export default function RaceArena() {
 
   return (
     <div className="arena" ref={wrapRef}>
-      <Canvas
+      {!webgl && (
+        <div className="arena__overlay">
+          <h2>3D ishlamayapti</h2>
+          <p>Brauzerда “Hardware acceleration”ni yoqing va sahifani yangilang.</p>
+          <button className="arena__ghost" onClick={() => navigate("/")}>Bosh sahifa</button>
+        </div>
+      )}
+      {webgl && <Canvas
         key={raceKey} shadows dpr={[1, 2]}
         camera={{ position: [0, 9, 30], fov: 55, near: 0.1, far: 500 }}
         gl={{ antialias: true }}
@@ -454,7 +465,7 @@ export default function RaceArena() {
         <color attach="background" args={["#0a0c12"]} />
         <fog attach="fog" args={["#0a0c12", 80, 200]} />
         <RaceWorld gameStateRef={gameStateRef} controlsRef={controlsRef} telemetryRef={telemetryRef} onFinish={onFinish} />
-      </Canvas>
+      </Canvas>}
 
       <button className="arena__back" onClick={() => navigate("/")}><ArrowLeft size={18} /> Chiqish</button>
       <button className="arena__mute" onClick={toggleMute} aria-label="Ovoz" title={muted ? "Ovozni yoqish" : "Ovozsiz"}>

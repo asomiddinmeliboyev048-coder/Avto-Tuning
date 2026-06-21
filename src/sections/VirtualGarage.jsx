@@ -22,6 +22,7 @@ import {
   TUNING_ADDONS,
   formatPrice,
 } from "../data/content.js";
+import { hasWebGL } from "../lib/webgl.js";
 import "./VirtualGarage.css";
 
 const GARAGE_MODEL_PATH = "/models/garage.glb";
@@ -343,6 +344,8 @@ export default function VirtualGarage() {
     return sum;
   }, [addons, car.basePrice, color.price, tint.price, wheel.price]);
 
+  const webgl = useMemo(() => hasWebGL(), []);
+
   return (
     <section id="garage" className="section garage">
       <div className="container">
@@ -362,7 +365,12 @@ export default function VirtualGarage() {
 
       {/* To'liq kenglikdagi o'yin uslubidagi sahna */}
       <div className={`garage__stage ${fullscreen ? "garage__stage--fs" : ""}`} ref={stageRef}>
-        <Canvas
+        {!webgl && (
+          <div className="garage__webgl-off">
+            ⚠️ 3D ko&apos;rinishi uchun brauzerда “Hardware acceleration”ni yoqing va sahifani yangilang.
+          </div>
+        )}
+        {webgl && <Canvas
           shadows dpr={[1, 2]}
           camera={{ position: [4.6, 2.1, 5.4], fov: 42, near: 0.1, far: 120 }}
           gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping }}
@@ -398,7 +406,7 @@ export default function VirtualGarage() {
             enableDamping
             dampingFactor={0.08}
           />
-        </Canvas>
+        </Canvas>}
 
         {/* Yuqori chap: mashina nomi */}
         <div className="garage__car-tag">

@@ -345,3 +345,18 @@
   .dock__play { padding: 11px 20px; }
   .garage__hint { display: none; }
 }
+
+
+.garage__webgl-off {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 28px;
+  color: var(--text-dim);
+  background: linear-gradient(180deg, var(--bg-elev), var(--bg));
+  font-size: 1rem;
+  line-height: 1.6;
+  z-index: 5;
+}
