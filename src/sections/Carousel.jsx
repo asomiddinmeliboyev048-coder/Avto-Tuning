@@ -22,7 +22,7 @@ export default function Carousel() {
       <div className="container gallery__head">
         <span className="eyebrow"><Images size={14} /> Bizning ishlarimiz</span>
         <h2 className="section-title">3D <span className="gradient-text">galereya</span></h2>
-        <p className="section-sub">Sichqonchani ustiga olib borsangiz aylanish to'xtaydi.</p>
+        <p className="section-sub">Aylantiring yoki suring — ishlarimiz galereyasi.</p>
       </div>
 
       {/* perspective beruvchi sahna */}

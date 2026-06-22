@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { ShoppingCart, Plus } from "lucide-react";
 import { db } from "../lib/firebase.js";
 import { useCart } from "../context/CartContext.jsx";
-import { PARTS, formatPrice } from "../data/content.js";
+import { PARTS, formatSom, UZS_RATE } from "../data/content.js";
 import "./Shop.css";
 
 export default function Shop() {
@@ -17,9 +17,9 @@ export default function Shop() {
     getDocs(collection(db, "products"))
       .then((snap) => {
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        setProducts(list.length ? list : PARTS);
+        setProducts(list.length ? list : PARTS.map((p) => ({ ...p, price: p.price * UZS_RATE })));
       })
-      .catch(() => setProducts(PARTS))
+      .catch(() => setProducts(PARTS.map((p) => ({ ...p, price: p.price * UZS_RATE }))))
       .finally(() => setLoading(false));
   }, []);
 
@@ -56,7 +56,7 @@ export default function Shop() {
                   <span className="shop__cat-tag">{p.category}</span>
                   <p className="shop__name">{p.name}</p>
                   <div className="shop__row">
-                    <span className="shop__price">{formatPrice(p.price)}</span>
+                    <span className="shop__price">{formatSom(p.price)}</span>
                     <button className="shop__add" onClick={() => addItem(p)}><Plus size={16} /> Savatga</button>
                   </div>
                 </div>

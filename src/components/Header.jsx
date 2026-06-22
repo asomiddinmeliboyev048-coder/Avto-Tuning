@@ -101,7 +101,7 @@ export default function Header() {
             </button>
 
             <button
-              className="header__theme interactive"
+              className="header__theme header__navicon interactive"
               onClick={() => navigate("/dokon")}
               aria-label="Dokon"
             >
@@ -109,7 +109,7 @@ export default function Header() {
             </button>
 
             <button
-              className="header__theme interactive"
+              className="header__theme header__navicon interactive"
               onClick={() => go("booking")}
               aria-label="Tamirlash — navbat olish"
               title="Mashinamni tamirlamoqchiman"
@@ -118,7 +118,7 @@ export default function Header() {
             </button>
 
             <button
-              className="header__theme interactive"
+              className="header__theme header__navicon interactive"
               onClick={() => navigate("/videolar")}
               aria-label="Videolar"
             >

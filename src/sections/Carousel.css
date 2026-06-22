@@ -71,16 +71,39 @@
   -webkit-box-reflect: below 2px linear-gradient(transparent 70%, rgba(255, 255, 255, 0.08));
 }
 
-/* responsive */
-@media (max-width: 768px) {
+/* responsive — mobil'da 3D o'chadi, oddiy gorizontal scroll bo'ladi */
+@media (max-width: 767px) {
   .gallery__scene {
-    --radius: 230px;
-    --item-w: 170px;
-    --item-h: 115px;
-    height: 280px;
-    perspective: 800px;
+    perspective: none;
+    height: auto;
   }
-}
-@media (max-width: 440px) {
-  .gallery__scene { --radius: 160px; }
+  .gallery__ring {
+    position: static;
+    transform: none !important;
+    animation: none !important;
+    width: auto;
+    height: auto;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 6px 16px 18px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gallery__ring::-webkit-scrollbar {
+    display: none;
+  }
+  .gallery__item {
+    position: static !important;
+    transform: none !important;
+    flex: 0 0 78%;
+    max-width: 320px;
+    height: 200px;
+    scroll-snap-align: center;
+  }
+  .gallery__item img {
+    -webkit-box-reflect: unset;
+  }
 }

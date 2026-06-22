@@ -19,3 +19,14 @@
 .vcard__author { margin-left: auto; color: var(--text-faint); }
 
 @media (max-width: 600px) { .videos__grid { grid-template-columns: 1fr; } }
+
+
+/* Mobil thumbnail glitch oldini olish */
+.vcard {
+  isolation: isolate;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+.vcard__thumb {
+  background-color: #0a0a0a;
+}

@@ -301,10 +301,15 @@ export default function VirtualGarage() {
 
   const toggleAddon = (id) => setAddons((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = async () => {
     const element = stageRef.current;
-    if (!document.fullscreenElement) element?.requestFullscreen?.().catch(() => {});
-    else document.exitFullscreen?.();
+    if (!document.fullscreenElement) {
+      try { await element?.requestFullscreen?.(); } catch { /* ignore */ }
+      try { await screen.orientation?.lock?.("landscape"); } catch { /* ignore */ }
+    } else {
+      try { await document.exitFullscreen?.(); } catch { /* ignore */ }
+      try { screen.orientation?.unlock?.(); } catch { /* ignore */ }
+    }
   };
 
   const goToRace = () => {

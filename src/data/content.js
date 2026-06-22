@@ -423,4 +423,11 @@ export const PARTS = [
   },
 ];
 
-export const formatPrice = (n) => "$" + n.toLocaleString("en-US");
+// Narx formatlash — O'zbek so'mi.
+// formatPrice: ichki USD-birlik qiymatlarni so'mga aylantiradi (garaj/zapchast).
+// formatSom: allaqachon so'mда bo'lgan qiymatlar uchun (admin mahsulotlari, buyurtmalar).
+export const UZS_RATE = 12500;
+export const formatPrice = (n) =>
+  Math.round((n || 0) * UZS_RATE).toLocaleString("uz-UZ") + " so'm";
+export const formatSom = (n) =>
+  Math.round(n || 0).toLocaleString("uz-UZ") + " so'm";

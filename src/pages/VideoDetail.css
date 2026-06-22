@@ -38,3 +38,16 @@
 .vd__c-actions button { display: inline-flex; align-items: center; gap: 5px; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; }
 .vd__c-actions button.is-on { color: var(--brand); }
 .vd__replies { margin-top: 12px; padding-left: 14px; border-left: 2px solid var(--border); }
+
+
+/* Mobil video render glitch oldini olish (GPU layer + stacking) */
+.vd__player {
+  isolation: isolate;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.vd__player video,
+.vd__player iframe {
+  background: #000;
+}

@@ -5,7 +5,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../lib/firebase.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { formatPrice } from "../../data/content.js";
+import { formatSom } from "../../data/content.js";
 import "./CartDrawer.css";
 
 export default function CartDrawer() {
@@ -74,7 +74,7 @@ export default function CartDrawer() {
                   <div className="cart__thumb" style={i.image ? { backgroundImage: `url(${i.image})` } : undefined} />
                   <div className="cart__info">
                     <p className="cart__name">{i.name}</p>
-                    <p className="cart__price">{formatPrice(i.price)}</p>
+                    <p className="cart__price">{formatSom(i.price)}</p>
                     <div className="cart__qty">
                       <button onClick={() => updateQty(i.id, i.qty - 1)}><Minus size={13} /></button>
                       <span>{i.qty}</span>
@@ -92,13 +92,13 @@ export default function CartDrawer() {
                 <input placeholder="Telefon (+998...)" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} />
                 {err && <p className="cart__err">{err}</p>}
                 <button className="cart__checkout" onClick={submit} disabled={loading}>
-                  {loading ? "Yuborilmoqda..." : `Tasdiqlash · ${formatPrice(total)}`}
+                  {loading ? "Yuborilmoqda..." : `Tasdiqlash · ${formatSom(total)}`}
                 </button>
                 <button className="cart__back" onClick={() => setCheckout(false)}>Ortga</button>
               </div>
             ) : (
               <div className="cart__foot">
-                <div className="cart__total"><span>Jami</span><strong>{formatPrice(total)}</strong></div>
+                <div className="cart__total"><span>Jami</span><strong>{formatSom(total)}</strong></div>
                 {err && <p className="cart__err">{err}</p>}
                 <button className="cart__checkout" onClick={startCheckout}>Buyurtma berish</button>
               </div>

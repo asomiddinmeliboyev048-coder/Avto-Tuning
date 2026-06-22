@@ -119,7 +119,7 @@ export default function VideoDetail() {
           {ytId ? (
             <iframe src={youtubeEmbed(ytId)} title={video.title} allowFullScreen frameBorder="0" />
           ) : video.videoURL ? (
-            <video src={video.videoURL} controls />
+            <video src={video.videoURL} controls playsInline preload="metadata" />
           ) : <div className="vd__novid">Video manbasi yo'q</div>}
         </div>
 

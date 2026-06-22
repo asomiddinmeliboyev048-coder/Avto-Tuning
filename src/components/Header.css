@@ -159,11 +159,21 @@
   .header__nav {
     display: none;
   }
-  .header__cta {
+  /* Dokon/Tamirlash/Video ikonlari mobil'da yashirin (toza ko'rinish) */
+  .header__navicon {
     display: none;
   }
+  /* Hamburger YO'Q */
   .header__burger {
-    display: grid;
+    display: none !important;
+  }
+  /* Kirish tugmasi KO'RINSIN */
+  .header__cta {
+    display: inline-flex;
+    padding: 9px 18px;
+  }
+  .header__actions {
+    gap: 8px;
   }
 }
 
