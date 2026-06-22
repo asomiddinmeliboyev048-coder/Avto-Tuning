@@ -7,6 +7,7 @@ import Loader from "./components/Loader.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import BottomNav from "./components/BottomNav.jsx";
 import CartDrawer from "./components/cart/CartDrawer.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -52,6 +53,7 @@ export default function App() {
         </main>
         <Footer />
         <CartDrawer />
+        <BottomNav />
       </div>
     </>
   );

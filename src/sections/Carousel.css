@@ -71,39 +71,55 @@
   -webkit-box-reflect: below 2px linear-gradient(transparent 70%, rgba(255, 255, 255, 0.08));
 }
 
-/* responsive — mobil'da 3D o'chadi, oddiy gorizontal scroll bo'ladi */
+/* responsive — mobil'da 3D o'chadi, avtomatik marquee scroll bo'ladi */
 @media (max-width: 767px) {
+  .gallery {
+    overflow: hidden;
+  }
   .gallery__scene {
     perspective: none;
     height: auto;
+    overflow: hidden;            /* marquee tashqarisini yashirish */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
-  .gallery__ring {
+  /* marquee tasma: rasmlar 2x duplicate qilingan, -50% gacha suriladi */
+  .gallery__ring--marquee {
     position: static;
-    transform: none !important;
-    animation: none !important;
-    width: auto;
+    transform: none;
+    width: max-content;
     height: auto;
     margin: 0;
     display: flex;
     gap: 12px;
-    overflow-x: auto;
-    padding: 6px 16px 18px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    padding: 6px 0 18px;
+    animation: gallery-marquee 26s linear infinite;
+    will-change: transform;
+    touch-action: pan-y;          /* vertikal scroll'ga xalaqit bermaydi */
   }
-  .gallery__ring::-webkit-scrollbar {
-    display: none;
+  .gallery__ring--marquee.is-paused {
+    animation-play-state: paused;
   }
-  .gallery__item {
-    position: static !important;
-    transform: none !important;
-    flex: 0 0 78%;
-    max-width: 320px;
-    height: 200px;
-    scroll-snap-align: center;
+  .gallery__ring--marquee .gallery__item {
+    position: static;
+    transform: none;
+    flex: 0 0 auto;
+    width: 260px;
+    height: 175px;
   }
-  .gallery__item img {
+  .gallery__ring--marquee .gallery__item img {
     -webkit-box-reflect: unset;
+  }
+
+  @keyframes gallery-marquee {
+    from { transform: translateX(0); }
+    /* yarmi (asl nusxa) ko'rsatilgach qaytadan boshlanadi -> uzluksiz */
+    to { transform: translateX(calc(-50% - 6px)); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__ring--marquee {
+    animation: none !important;
   }
 }

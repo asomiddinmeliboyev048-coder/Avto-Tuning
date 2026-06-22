@@ -1,6 +1,6 @@
 import { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { ContactShadows, Environment, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import {
   Car,
@@ -245,6 +245,27 @@ function CanvasLoader() {
   );
 }
 
+/* Mobil/portret ekranда mashina kesilmasligi uchun aspect'ga qarab FOV moslaydi.
+   OrbitControls faqat pozitsiyani boshqaradi — FOV'ni biz moslaymiz, shuning
+   uchun ziddiyat bo'lmaydi. */
+function ResponsiveCamera() {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    const aspect = size.width / Math.max(size.height, 1);
+    let fov;
+    if (aspect < 0.62) fov = 70;        // tor/baland telefon (portret)
+    else if (aspect < 0.85) fov = 60;
+    else if (aspect < 1.1) fov = 52;
+    else if (aspect < 1.5) fov = 46;
+    else fov = 42;                       // keng ekran / landscape
+    if (camera.fov !== fov) {
+      camera.fov = fov;
+      camera.updateProjectionMatrix();
+    }
+  }, [camera, size.width, size.height]);
+  return null;
+}
+
 function GarageLighting() {
   return (
     <>
@@ -396,6 +417,7 @@ export default function VirtualGarage() {
           }}
         >
           <color attach="background" args={["#15171a"]} />
+          <ResponsiveCamera />
           <GarageLighting />
           <Suspense fallback={<CanvasLoader />}>
             <GarageErrorBoundary>

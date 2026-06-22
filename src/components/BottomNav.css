@@ -1,0 +1,49 @@
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(12, 12, 18, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 61, 61, 0.22);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+    padding: 8px 14px;
+  }
+  .bottom-nav-item.active,
+  .bottom-nav-item:active {
+    color: var(--brand);
+  }
+  .bottom-nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* content bottom nav ostida ko'rinsin */
+  #root {
+    padding-bottom: 64px;
+  }
+}
