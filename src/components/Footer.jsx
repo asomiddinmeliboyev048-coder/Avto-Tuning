@@ -151,12 +151,12 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=4RVH%2BFRQ%2C+Jizzax%2C+Jizzax+viloyati"
+                  href="https://www.google.com/maps/search/?api=1&query=4RVH%2BFRQ%2C+Jizzax%2C+Jizzax+viloyati%2C+%D0%A3%D0%B7%D0%B1%D0%B5%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer__contact footer__contact--link interactive"
                 >
-                  <MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati
+                  <MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati, Oʻzbekiston
                 </a>
               </li>
               <li>
