@@ -2,11 +2,9 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import {
   Instagram,
-  Youtube,
   Send,
   Phone,
   MapPin,
-  Mail,
   ArrowUpRight,
 } from "lucide-react";
 import { NAV_LINKS } from "../data/content.js";
@@ -81,22 +79,19 @@ export default function Footer() {
             </p>
             <div className="footer__socials">
               <a
-                href="#"
-                className="footer__social interactive"
+                href="https://instagram.com/avtotuning_jizzax"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer__social footer__social--ig interactive"
                 aria-label="Instagram"
               >
                 <Instagram size={18} />
               </a>
               <a
-                href="#"
-                className="footer__social interactive"
-                aria-label="YouTube"
-              >
-                <Youtube size={18} />
-              </a>
-              <a
-                href="#"
-                className="footer__social interactive"
+                href="https://t.me/jizzaxavtotuning"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer__social footer__social--tg interactive"
                 aria-label="Telegram"
               >
                 <Send size={18} />
@@ -146,14 +141,43 @@ export default function Footer() {
           <div className="footer__col">
             <h4 className="footer__heading">Aloqa</h4>
             <ul className="footer__contacts">
-              <li className="footer__contact">
-                <Phone size={16} /> +998 90 123 45 67
+              <li>
+                <a
+                  href="tel:+998915929361"
+                  className="footer__contact footer__contact--link interactive"
+                >
+                  <Phone size={16} /> +998 91 592 93 61
+                </a>
               </li>
-              <li className="footer__contact">
-                <Mail size={16} /> info@apexgarage.uz
+              <li>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=4RVH%2BFRQ%2C+Jizzax%2C+Jizzax+viloyati"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer__contact footer__contact--link interactive"
+                >
+                  <MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati
+                </a>
               </li>
-              <li className="footer__contact">
-                <MapPin size={16} /> Toshkent, Yunusobod 4-kvartal
+              <li>
+                <a
+                  href="https://instagram.com/avtotuning_jizzax"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer__contact footer__contact--link interactive"
+                >
+                  <Instagram size={16} /> @avtotuning_jizzax
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/jizzaxavtotuning"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer__contact footer__contact--link interactive"
+                >
+                  <Send size={16} /> Telegram: jizzaxavtotuning
+                </a>
               </li>
             </ul>
           </div>

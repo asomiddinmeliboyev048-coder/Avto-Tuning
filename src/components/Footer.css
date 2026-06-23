@@ -118,6 +118,12 @@
   border-color: transparent;
   transform: translateY(-4px);
 }
+.footer__social--ig:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+.footer__social--tg:hover {
+  background: linear-gradient(45deg, #2aabee, #229ed9);
+}
 
 .footer__heading {
   font-size: 0.82rem;
@@ -160,7 +166,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 .footer__contact {
   display: flex;
@@ -172,6 +178,21 @@
 .footer__contact svg {
   color: var(--brand);
   flex-shrink: 0;
+}
+/* Bosiladigan aloqa havolalari */
+.footer__contact--link {
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: border-color 0.3s var(--ease-out-expo),
+    color 0.3s, transform 0.3s, background 0.3s;
+}
+.footer__contact--link:hover {
+  color: var(--text);
+  border-color: var(--brand);
+  transform: translateX(4px);
+  background: var(--bg-elev);
 }
 
 .footer__bottom {
