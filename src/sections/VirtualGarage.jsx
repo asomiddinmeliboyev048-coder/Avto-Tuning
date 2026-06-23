@@ -305,6 +305,7 @@ export default function VirtualGarage() {
   const [autoRotate, setAutoRotate] = useState(true);
   const [tab, setTab] = useState("rang");
   const [show3D, setShow3D] = useState(false);
+  const [inView, setInView] = useState(true);
   const stageRef = useRef(null);
 
   const car = CARS_CATALOG[carIndex];
@@ -349,6 +350,19 @@ export default function VirtualGarage() {
       document.removeEventListener("fullscreenchange", onChange);
       document.removeEventListener("pointerlockchange", onChange);
     };
+  }, []);
+
+  // Garaj ekrandan chiqsa (footer ko'rinsa) render loop'ni to'xtatamiz —
+  // mobil GPU glitch va batareya isrofini oldini oladi.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "150px", threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const options = useMemo(
@@ -406,8 +420,17 @@ export default function VirtualGarage() {
         )}
         {show3D && webgl && <Canvas
           shadows dpr={[1, 2]}
+          frameloop={inView ? "always" : "never"}
           camera={{ position: [4.6, 2.1, 5.4], fov: 42, near: 0.1, far: 120 }}
-          gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping }}
+          gl={{
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance",
+            precision: "mediump",
+            stencil: false,
+            depth: true,
+            toneMapping: THREE.ACESFilmicToneMapping,
+          }}
           onCreated={({ gl }) => {
             gl.outputColorSpace = THREE.SRGBColorSpace;
             gl.toneMappingExposure = 1.08;

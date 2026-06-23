@@ -2,6 +2,7 @@ import { Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
 import { Float, ContactShadows } from "@react-three/drei";
+import { useInView } from "../../lib/useInView.js";
 
 function Rim({ color = "#d4af37" }) {
   const ref = useRef();
@@ -58,27 +59,39 @@ function Rim({ color = "#d4af37" }) {
 }
 
 export default function PartShowcase3D({ color }) {
+  const [wrapRef, inView] = useInView();
   return (
-    <Canvas
-      dpr={[1, 2]}
-      camera={{ position: [0, 1.5, 4.5], fov: 40 }}
-      gl={{ antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: "high-performance" }}
-      style={{ width: "100%", height: "100%", display: "block", touchAction: "pan-y" }}
-    >
-      <ambientLight intensity={0.7} />
-      <spotLight position={[5, 8, 5]} intensity={2} angle={0.4} penumbra={1} />
-      <pointLight position={[-5, 2, -5]} intensity={1} color="#ff8a3d" />
-      <Suspense fallback={null}>
-        <Float speed={2} rotationIntensity={0.4} floatIntensity={0.6}>
-          <Rim color={color} />
-        </Float>
-        <ContactShadows
-          position={[0, -1.6, 0]}
-          opacity={0.4}
-          scale={8}
-          blur={2.5}
-        />
-      </Suspense>
-    </Canvas>
+    <div ref={wrapRef} style={{ width: "100%", height: "100%" }}>
+      <Canvas
+        frameloop={inView ? "always" : "never"}
+        dpr={[1, 2]}
+        camera={{ position: [0, 1.5, 4.5], fov: 40 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          premultipliedAlpha: false,
+          powerPreference: "high-performance",
+          precision: "mediump",
+          stencil: false,
+          depth: true,
+        }}
+        style={{ width: "100%", height: "100%", display: "block", touchAction: "pan-y" }}
+      >
+        <ambientLight intensity={0.7} />
+        <spotLight position={[5, 8, 5]} intensity={2} angle={0.4} penumbra={1} />
+        <pointLight position={[-5, 2, -5]} intensity={1} color="#ff8a3d" />
+        <Suspense fallback={null}>
+          <Float speed={2} rotationIntensity={0.4} floatIntensity={0.6}>
+            <Rim color={color} />
+          </Float>
+          <ContactShadows
+            position={[0, -1.6, 0]}
+            opacity={0.4}
+            scale={8}
+            blur={2.5}
+          />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 }

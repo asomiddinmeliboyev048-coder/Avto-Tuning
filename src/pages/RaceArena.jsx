@@ -454,7 +454,14 @@ export default function RaceArena() {
       {webgl && <Canvas
         key={raceKey} shadows dpr={[1, 2]}
         camera={{ position: [0, 9, 30], fov: 55, near: 0.1, far: 500 }}
-        gl={{ antialias: true }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+          precision: "mediump",
+          stencil: false,
+          depth: true,
+        }}
         onCreated={({ gl }) => {
           gl.outputColorSpace = THREE.SRGBColorSpace;
           gl.toneMapping = THREE.ACESFilmicToneMapping;
