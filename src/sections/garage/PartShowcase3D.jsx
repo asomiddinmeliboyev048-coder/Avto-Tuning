@@ -59,7 +59,12 @@ function Rim({ color = "#d4af37" }) {
 
 export default function PartShowcase3D({ color }) {
   return (
-    <Canvas dpr={[1, 2]} camera={{ position: [0, 1.5, 4.5], fov: 40 }}>
+    <Canvas
+      dpr={[1, 2]}
+      camera={{ position: [0, 1.5, 4.5], fov: 40 }}
+      gl={{ antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: "high-performance" }}
+      style={{ width: "100%", height: "100%", display: "block", touchAction: "pan-y" }}
+    >
       <ambientLight intensity={0.7} />
       <spotLight position={[5, 8, 5]} intensity={2} angle={0.4} penumbra={1} />
       <pointLight position={[-5, 2, -5]} intensity={1} color="#ff8a3d" />

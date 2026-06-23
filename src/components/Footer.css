@@ -3,6 +3,11 @@
   padding-top: 80px;
   border-top: 1px solid var(--border);
   overflow: hidden;
+  /* Mobil WebGL glitch fix: footer o'z opaque qatlamida bo'lib,
+     tagidagi 3D canvas (garaj/disk/poyga) ustiga oqib chiqmaydi */
+  z-index: 10;
+  isolation: isolate;
+  background: var(--bg);
 }
 
 /* CTA */

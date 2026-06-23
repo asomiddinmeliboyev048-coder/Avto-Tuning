@@ -19,6 +19,8 @@
   min-height: 560px;
   max-height: 820px;
   overflow: hidden;
+  isolation: isolate;
+  z-index: 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   background:

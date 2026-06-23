@@ -106,6 +106,21 @@ img {
   display: block;
 }
 
+/* ============================================
+   Three.js / WebGL canvas — mobil glitch fix
+   ============================================ */
+canvas {
+  max-width: 100%;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  canvas {
+    max-width: 100%;
+    display: block;
+  }
+}
+
 ::selection {
   background: var(--brand);
   color: #fff;
