@@ -1,20 +1,24 @@
-// 3D aylanuvchi karusel galereya — sof CSS 3D transform.
-// Mobil'da: avtomatik gorizontal scroll (marquee), touch'da to'xtaydi.
-// Rasm sonini o'zgartirish: GALLERY massivига rasm qo'shing/oling.
-// Aylanish radiusi: Carousel.css dagi --radius o'zgaruvchisi.
+// 3D aylanuvchi karusel galereya
 import { useEffect, useRef, useState } from "react";
 import { Images } from "lucide-react";
 import "./Carousel.css";
 
+// 1. Rasmlaringizni shu yerga import qiling (nomlarini o'zingiznikiga moslab o'zgartiring)
+import car1 from "../assets/bmw1.jpg";
+import car2 from "../assets/gentra2.jpg";
+import car3 from "../assets/kia3.jpg";
+import car4 from "../assets/malibu4.jpg";
+import car4 from "../assets/mashina5.jpg";
+import car4 from "../assets/zeekr6.jpg";
+
+// 2. Import qilingan rasmlarni shu massivga qo'shing
 const GALLERY = [
-  "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=600&q=80",
+  car1,
+  car2,
+  car3,
+  car4,
+  car5,
+  car6,
 ];
 
 export default function Carousel() {
@@ -31,7 +35,6 @@ export default function Carousel() {
     return () => mq.removeEventListener?.("change", update);
   }, []);
 
-  // Touch/drag paytida to'xtaydi, qo'yib yuborilгach 2s dan keyin davom etadi
   const pause = () => {
     setPaused(true);
     if (resumeTimer.current) clearTimeout(resumeTimer.current);
@@ -42,7 +45,6 @@ export default function Carousel() {
   };
   useEffect(() => () => resumeTimer.current && clearTimeout(resumeTimer.current), []);
 
-  // Mobil marquee uchun rasmlarni 2 marta takrorlaymiz (uzluksiz aylanish)
   const mobileItems = isMobile ? [...GALLERY, ...GALLERY] : GALLERY;
 
   return (
@@ -55,7 +57,6 @@ export default function Carousel() {
         </p>
       </div>
 
-      {/* perspective beruvchi sahna */}
       <div className="gallery__scene" style={{ "--count": count }}>
         <div
           className={`gallery__ring ${isMobile ? "gallery__ring--marquee" : ""} ${paused ? "is-paused" : ""}`}
@@ -76,7 +77,6 @@ export default function Carousel() {
               }
               aria-hidden={isMobile && i >= count ? "true" : undefined}
             >
-              {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
               <img src={src} alt={`Tuning ish ${(i % count) + 1}`} loading="lazy" />
             </div>
           ))}
