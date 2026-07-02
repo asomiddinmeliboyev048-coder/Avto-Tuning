@@ -3,7 +3,6 @@ import Hero from "./sections/Hero.jsx";
 import Process from "./sections/Process.jsx";
 import VirtualGarage from "./sections/VirtualGarage.jsx";
 import RacingGame from "./sections/RacingGame.jsx";
-import Parts from "./sections/Parts.jsx";
 import Carousel from "./sections/Carousel.jsx";
 import Reviews from "./sections/Reviews.jsx";
 import Booking from "./sections/Booking.jsx";
