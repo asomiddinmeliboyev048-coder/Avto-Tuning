@@ -65,7 +65,7 @@ export default function Process() {
           {/* 2-Bosqich */}
           <article className="pstep">
             <div className="pstep__media-wrap">
-              <InstagramVideo url="https://www.instagram.com/reel/DSm6-jMCP7n/" />
+              <InstagramVideo url="https://www.instagram.com/reel/DV1dzf4CNN0/" />
             </div>
             <div className="pstep__body">
               <span className="pstep__tag">2-Bosqich</span>
@@ -77,7 +77,7 @@ export default function Process() {
           {/* 3-Bosqich */}
           <article className="pstep">
             <div className="pstep__media-wrap">
-              <InstagramVideo url="https://www.instagram.com/reel/DQwKRP8iNlZ/" />
+              <InstagramVideo url="https://www.instagram.com/reel/DVtywlKiF_w/" />
             </div>
             <div className="pstep__body">
               <span className="pstep__tag">3-Bosqich</span>
