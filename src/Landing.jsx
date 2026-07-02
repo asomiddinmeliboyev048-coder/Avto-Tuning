@@ -17,7 +17,6 @@ export default function Landing() {
     <>
       <Guard><Hero /></Guard>
       <Guard><Process /></Guard>
-      <Guard label="3D garaj yuklanmadi (brauzer/WebGL). Sahifani yangilab ko'ring."><VirtualGarage /></Guard>
       <Guard><RacingGame /></Guard>
       <Guard label="3D zapchast ko'rinishi yuklanmadi."><Parts /></Guard>
       <Guard><Carousel /></Guard>
