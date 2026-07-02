@@ -79,10 +79,10 @@ export default function Hero() {
 
   return (
     <section id="hero" className="hero" ref={root}>
-      {/* Background car image with overlay */}
+      {/* Background car image with overlay (YANGILANDI) */}
       <div className="hero__bg" ref={carRef}>
         <img
-          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=80"
+          src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAEtY5xjWe_T9UL32yC__HPMA9XFNfFBZBrKdgGibJClc7ASkO_RfCbYNjifpHguH777eH9E080GMrc-rwfy2zR-A-eaH12Qg9hXh-ptDUtoffsf7FXtM98DEIVLaxWL4MCzawMgKT9aw7y6=w408-h544-k-no"
           alt="Premium tuning avtomobili"
           loading="eager"
         />
