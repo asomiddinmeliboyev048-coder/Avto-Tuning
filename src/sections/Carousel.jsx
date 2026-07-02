@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { Images } from "lucide-react";
 import "./Carousel.css";
 
-// 1. Rasmlaringizni shu yerga import qiling (nomlarini o'zingiznikiga moslab o'zgartiring)
+// 1. Har bir rasmga alohida nom bering (car4, car5, car6)
 import car1 from "../assets/bmw1.jpg";
 import car2 from "../assets/gentra2.jpg";
 import car3 from "../assets/kia3.jpg";
 import car4 from "../assets/malibu4.jpg";
-import car4 from "../assets/mashina5.jpg";
-import car4 from "../assets/zeekr6.jpg";
+import car5 from "../assets/mashina5.jpg";
+import car6 from "../assets/zeekr6.jpg";
 
-// 2. Import qilingan rasmlarni shu massivga qo'shing
+// 2. Ularni massivda ham tartib bilan ko'rsating
 const GALLERY = [
   car1,
   car2,
