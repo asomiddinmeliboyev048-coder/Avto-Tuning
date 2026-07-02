@@ -72,7 +72,7 @@ export default function Booking() {
             belgilaydi. Ustaxonamiz manzili pastda ko'rsatilgan.
           </p>
           <div className="booking__contacts">
-            <span><Phone size={16} /> +998 91 592 93 61</span>
+            <span><Phone size={16} /> +998 91 592 92 61</span>
             <span><MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati, O'zbekiston</span>
             <span><Clock size={16} /> Har kuni 09:00 – 22:00</span>
           </div>
