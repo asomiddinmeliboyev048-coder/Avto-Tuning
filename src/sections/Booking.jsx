@@ -65,9 +65,9 @@ export default function Booking() {
             belgilaydi. Ustaxonamiz manzili pastda ko'rsatilgan.
           </p>
           <div className="booking__contacts">
-            <span><Phone size={16} /> +998 90 000 00 00</span>
-            <span><MapPin size={16} /> Toshkent sh., Chilonzor t., 1-uy</span>
-            <span><Clock size={16} /> Har kuni 09:00 – 20:00</span>
+            <span><Phone size={16} /> +998915929361/span>
+            <span><MapPin size={16} /> </span>
+            <span><Clock size={16} /> Har kuni 09:00 – 22:00</span>
           </div>
         </div>
 
