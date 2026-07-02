@@ -259,3 +259,20 @@ canvas {
     background: #08080c !important; /* Default dark backgroundingiz foni */
   }
 }
+@media (min-width: 1024px) {
+  /* Process bo'limining asosiy o'rab turuvchi containeriga bering */
+  .process__container, .process__wrapper { 
+    display: flex;
+    align-items: center;       /* Matn va Instagram videoni simmetrik o'rtaga tekislaydi */
+    justify-content: space-between;
+    gap: 40px;
+  }
+  
+  /* Instagram video o'ng tomonda chiroyli joylashishi uchun */
+  .process__right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
