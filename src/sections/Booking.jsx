@@ -31,9 +31,16 @@ export default function Booking() {
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async () => {
-    if (!user) { setErr("Navbat olish uchun avval tizimga kiring (yuqoridagi “Kirish” tugmasi)."); return; }
-    if (!form.name || !form.phone) { setErr("Ism va telefon raqamini kiriting."); return; }
-    setLoading(true); setErr("");
+    if (!user) { 
+      setErr("Navbat olish uchun avval tizimga kiring (yuqoridagi “Kirish” tugmasi)."); 
+      return; 
+    }
+    if (!form.name || !form.phone) { 
+      setErr("Ism va telefon raqamini kiriting."); 
+      return; 
+    }
+    setLoading(true); 
+    setErr("");
     try {
       await addDoc(collection(db, "bookings"), {
         userId: user.uid,
@@ -65,8 +72,8 @@ export default function Booking() {
             belgilaydi. Ustaxonamiz manzili pastda ko'rsatilgan.
           </p>
           <div className="booking__contacts">
-            <span><Phone size={16} /> +998915929361/span>
-            <span><MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati, Узбекистан </span>
+            <span><Phone size={16} /> +998 91 592 93 61</span>
+            <span><MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati, O'zbekiston</span>
             <span><Clock size={16} /> Har kuni 09:00 – 22:00</span>
           </div>
         </div>
@@ -82,8 +89,14 @@ export default function Booking() {
           ) : (
             <>
               <h3 className="booking__title">So'rov shakli</h3>
-              <div className="booking__field"><label>Ism</label><input value={form.name} onChange={set("name")} placeholder="To'liq ism" /></div>
-              <div className="booking__field"><label>Telefon</label><input value={form.phone} onChange={set("phone")} placeholder="+998 .. ... .. .." /></div>
+              <div className="booking__field">
+                <label>Ism</label>
+                <input value={form.name} onChange={set("name")} placeholder="To'liq ism" />
+              </div>
+              <div className="booking__field">
+                <label>Telefon</label>
+                <input value={form.phone} onChange={set("phone")} placeholder="+998 .. ... .. .." />
+              </div>
               <div className="booking__field">
                 <label>Xizmat turi</label>
                 <input value={form.service} onChange={set("service")} placeholder={SERVICE_HINT} />
@@ -96,7 +109,10 @@ export default function Booking() {
                   <option value="boshqa">Boshqa</option>
                 </select>
               </div>
-              <div className="booking__field"><label>Izoh (ixtiyoriy)</label><textarea rows={2} value={form.note} onChange={set("note")} placeholder="Qo'shimcha ma'lumot..." /></div>
+              <div className="booking__field">
+                <label>Izoh (ixtiyoriy)</label>
+                <textarea rows={2} value={form.note} onChange={set("note")} placeholder="Qo'shimcha ma'lumot..." />
+              </div>
               {err && <p className="booking__err">{err}</p>}
               <button className="btn btn-primary booking__submit" onClick={submit} disabled={loading}>
                 {loading ? "Yuborilmoqda..." : "Navbat olish"}
