@@ -3,10 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Premium Avto Tuning ustaxonasi vebsayti - GSAP motion, Three.js virtual garaj",
-  "engines": {
-    "node": "20.x"
-  },
+  "description": "Premium Avto Tuning ustaxonasi vebsayti",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
