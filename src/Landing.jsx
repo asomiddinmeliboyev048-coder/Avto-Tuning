@@ -1,4 +1,3 @@
-// Asosiy (landing) sahifa — har bir bo'lim ErrorBoundary bilan himoyalangan.
 import Hero from "./sections/Hero.jsx";
 import Process from "./sections/Process.jsx";
 import VirtualGarage from "./sections/VirtualGarage.jsx";
@@ -17,8 +16,9 @@ export default function Landing() {
     <>
       <Guard><Hero /></Guard>
       <Guard><Process /></Guard>
+      <Guard label="3D garaj yuklanmadi (brauzer/WebGL). Sahifani yangilab ko'ring."><VirtualGarage /></Guard>
       <Guard><RacingGame /></Guard>
-      <Guard label="3D zapchast ko'rinishi yuklanmadi."><Parts /></Guard>
+      {/* <Parts /> qatori bu yerdan olib tashlandi */}
       <Guard><Carousel /></Guard>
       <Guard><Reviews /></Guard>
       <Guard><Booking /></Guard>
