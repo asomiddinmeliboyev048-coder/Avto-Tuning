@@ -1,8 +1,51 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PROCESS_STEPS, BEFORE_AFTER } from "../data/content.js";
 import "./Process.css";
+
+// 1. VIDEOLAR UCHUN MA'LUMOTLAR
+const MY_PROCESS_STEPS = [
+  {
+    id: 1,
+    tag: "1-Bosqich",
+    title: "Chuqur tahlil",
+    desc: "Avtomobilning holatini to'liq o'rganib chiqamiz va sizning xohishlaringizni tinglaymiz.",
+    video: "https://avtotuning.vercel.app//videolar/A4dDeKoNifUoVWr0VPVI",
+    poster: ""
+  },
+  {
+    id: 2,
+    tag: "2-Bosqich",
+    title: "Konsept va vizualizatsiya",
+    desc: "Dizayn tayyorlanadi va 3D formatda qanday chiqishini oldindan ko'rsatamiz.",
+    video: "https://avtotuning.vercel.app//videolar/re69H2bjk5xRanA0V99C",
+    poster: ""
+  },
+  {
+    id: 3,
+    tag: "3-Bosqich",
+    title: "Premium tuning",
+    desc: "Eng sifatli materiallar va ehtiyot qismlar bilan amaliy ishni boshlaymiz.",
+    video: "https://avtotuning.vercel.app//videolar/5XdVEjWXkZU0RMbVLb8Q",
+    poster: ""
+  }
+];
+
+// 2. OLDIN/KEYIN RASMLARI UCHUN MA'LUMOTLAR
+const MY_BEFORE_AFTER = [
+  {
+    id: 1,
+    title: "Oq SUV Transformatsiyasi",
+    before: "/image_5f8d1d.jpg",
+    after: "/image_5f8d3a.jpg"
+  },
+  {
+    id: 2,
+    title: "Qora G-Wagon Transformatsiyasi",
+    before: "/image_5f8d3f.jpg",
+    after: "/image_5f8d5b.jpg"
+  }
+];
 
 function BeforeAfter({ item }) {
   const [pos, setPos] = useState(50);
@@ -135,7 +178,7 @@ export default function Process() {
         </div>
 
         <div className="process__steps">
-          {PROCESS_STEPS.map((step, i) => (
+          {MY_PROCESS_STEPS.map((step) => (
             <article className="pstep" key={step.id}>
               <div className="pstep__media-wrap">
                 <video
@@ -170,7 +213,7 @@ export default function Process() {
           </p>
         </div>
         <div className="process__ba-grid">
-          {BEFORE_AFTER.map((item) => (
+          {MY_BEFORE_AFTER.map((item) => (
             <BeforeAfter key={item.id} item={item} />
           ))}
         </div>
