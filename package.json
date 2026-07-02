@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Premium Avto Tuning ustaxonasi vebsayti - GSAP motion, Three.js virtual garaj",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,8 +33,4 @@
     "@vitejs/plugin-react": "^4.3.2",
     "vite": "^5.4.8"
   }
-  "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "gsap": "^3.12.0"
-  },
+}
