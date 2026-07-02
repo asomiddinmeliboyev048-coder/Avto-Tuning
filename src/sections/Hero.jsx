@@ -79,15 +79,16 @@ export default function Hero() {
 
   return (
     <section id="hero" className="hero" ref={root}>
-      {/* Background car image with overlay (YANGILANDI) */}
+      {/* Background car image with overlay (YANGILANDI VA TINIQLASHTIRILDI) */}
       <div className="hero__bg" ref={carRef}>
         <img
           src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAEtY5xjWe_T9UL32yC__HPMA9XFNfFBZBrKdgGibJClc7ASkO_RfCbYNjifpHguH777eH9E080GMrc-rwfy2zR-A-eaH12Qg9hXh-ptDUtoffsf7FXtM98DEIVLaxWL4MCzawMgKT9aw7y6=w408-h544-k-no"
           alt="Premium tuning avtomobili"
           loading="eager"
         />
-        <div className="hero__bg-overlay" />
-        <div className="hero__grid" />
+        {/* Rasmni qoraytirib, xira qilib turgan qatorlar olib tashlandi */}
+        {/* <div className="hero__bg-overlay" /> */}
+        {/* <div className="hero__grid" /> */}
       </div>
 
       <div className="hero__content container">
@@ -129,24 +130,3 @@ export default function Hero() {
               <div
                 className="hero__stat-num gradient-text"
                 data-value={s.value}
-                data-suffix={s.suffix}
-              >
-                0{s.suffix}
-              </div>
-              <div className="hero__stat-label">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <a
-        href="#process"
-        className="hero__scroll interactive"
-        aria-label="Pastga"
-      >
-        <ArrowDown size={18} />
-        <span>Aylantiring</span>
-      </a>
-    </section>
-  );
-}
