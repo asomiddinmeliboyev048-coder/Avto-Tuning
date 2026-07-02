@@ -66,7 +66,7 @@ export default function Booking() {
           </p>
           <div className="booking__contacts">
             <span><Phone size={16} /> +998915929361/span>
-            <span><MapPin size={16} /> </span>
+            <span><MapPin size={16} /> 4RVH+FRQ, Jizzax, Jizzax viloyati, Узбекистан </span>
             <span><Clock size={16} /> Har kuni 09:00 – 22:00</span>
           </div>
         </div>
