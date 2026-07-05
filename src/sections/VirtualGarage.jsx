@@ -1,7 +1,7 @@
 import { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Html, OrbitControls, useGLTF } from "@react-three/drei";
+import { ContactShadows, Environment, Html, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import {
   Car,
   Check,
@@ -238,9 +238,17 @@ function RealCarModel({ modelPath, options }) {
 }
 
 function CanvasLoader() {
+  const { progress } = useProgress();
+  const pct = Math.min(100, Math.round(progress));
   return (
     <Html center>
-      <div className="garage__loading">3D studio yuklanmoqda...</div>
+      <div className="garage__loading">
+        <div className="garage__loading-spinner" />
+        <div className="garage__loading-bar">
+          <span style={{ width: `${pct}%` }} />
+        </div>
+        <p className="garage__loading-text">3D studio yuklanmoqda... {pct}%</p>
+      </div>
     </Html>
   );
 }
@@ -364,6 +372,31 @@ export default function VirtualGarage() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // Tezlik: garaj bo'limi ko'rinishga kelganda garaj + joriy mashinani oldindan
+  // yuklaymiz (preload). Shunda "3D garajni ochish" bosilganда deyarli darhol ochiladi.
+  useEffect(() => {
+    if (!inView) return;
+    try {
+      useGLTF.preload(GARAGE_MODEL_PATH);
+      useGLTF.preload(car.path);
+    } catch { /* ignore */ }
+  }, [inView, car.path]);
+
+  // 3D ochilgandan so'ng qo'shni (oldingi/keyingi) mashinalarni fon rejimida
+  // preload qilamiz — mashina almashtirish silliq bo'lishi uchun.
+  useEffect(() => {
+    if (!show3D) return undefined;
+    const next = CARS_CATALOG[(carIndex + 1) % carCount].path;
+    const prev = CARS_CATALOG[(carIndex - 1 + carCount) % carCount].path;
+    const t = setTimeout(() => {
+      try {
+        useGLTF.preload(next);
+        useGLTF.preload(prev);
+      } catch { /* ignore */ }
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [show3D, carIndex, carCount]);
 
   const options = useMemo(
     () => ({

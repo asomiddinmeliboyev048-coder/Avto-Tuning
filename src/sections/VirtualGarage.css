@@ -41,9 +41,43 @@
 }
 
 .garage__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   font-size: 0.85rem;
   color: var(--text-dim);
   white-space: nowrap;
+}
+.garage__loading-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--brand);
+  animation: garage-spin 0.8s linear infinite;
+}
+@keyframes garage-spin {
+  to { transform: rotate(360deg); }
+}
+.garage__loading-bar {
+  width: 180px;
+  height: 5px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.garage__loading-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 100px;
+  background: var(--brand-gradient);
+  transition: width 0.25s ease;
+}
+.garage__loading-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* Mashina nomi (yuqori chap) */

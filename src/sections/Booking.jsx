@@ -32,7 +32,7 @@ export default function Booking() {
 
   const submit = async () => {
     if (!user) { 
-      setErr("Navbat olish uchun avval tizimga kiring (yuqoridagi “Kirish” tugmasi)."); 
+      setErr("Navbat olish uchun avval profilingizni to'ldiring."); 
       return; 
     }
     if (!form.name || !form.phone) { 

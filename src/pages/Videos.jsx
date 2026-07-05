@@ -50,9 +50,24 @@ export default function Videos() {
           <p className="videos__empty">Hozircha video yo'q. Birinchi bo'lib yuklang! (Profil → Video yuklash)</p>
         ) : (
           <div className="videos__grid">
-            {videos.map((v) => (
+            {videos.map((v) => {
+              const thumb = thumbOf(v);
+              return (
               <button key={v.id} className="vcard" onClick={() => navigate(`/videolar/${v.id}`)}>
-                <div className="vcard__thumb" style={{ backgroundImage: `url(${thumbOf(v)})` }}>
+                <div className="vcard__thumb">
+                  {thumb ? (
+                    <div className="vcard__thumb-img" style={{ backgroundImage: `url(${thumb})` }} />
+                  ) : v.videoURL ? (
+                    <video
+                      className="vcard__thumb-vid"
+                      src={`${v.videoURL}#t=0.5`}
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <div className="vcard__thumb-img vcard__thumb-img--empty" />
+                  )}
                   <PlayCircle size={40} className="vcard__play" />
                   {v.isAdminPost && <span className="vcard__badge">ADMIN</span>}
                 </div>
@@ -65,7 +80,8 @@ export default function Videos() {
                   </div>
                 </div>
               </button>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

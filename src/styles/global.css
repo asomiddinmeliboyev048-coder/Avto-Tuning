@@ -256,7 +256,7 @@ canvas {
   footer .glass {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: #08080c !important; /* Default dark backgroundingiz foni */
+    background: var(--bg) !important; /* mavzuga mos fon (dark/light) */
   }
 }
 @media (min-width: 1024px) {
@@ -275,4 +275,82 @@ canvas {
     align-items: center;
     width: 100%;
   }
+}
+
+
+/* ============================================
+   Professional Polish — 2026 refresh
+   ============================================ */
+
+/* Ravon, tekis tipografiya */
+body {
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+.section-title {
+  letter-spacing: -0.03em;
+}
+.section-sub {
+  line-height: 1.7;
+}
+
+/* gradient-text uchun zaxira rang (clip qo'llab-quvvatlanmasa) */
+.gradient-text {
+  color: var(--brand);
+}
+
+/* Tugmalar — chuqurroq, aniqroq interaktivlik */
+.btn {
+  position: relative;
+  letter-spacing: 0.01em;
+}
+.btn:active {
+  transform: translateY(-1px) scale(0.99);
+}
+.btn-primary {
+  background-image: var(--brand-gradient);
+  box-shadow: 0 8px 28px -10px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Glass kartalar — nozik ichki nur va yumshoq soya */
+.glass {
+  box-shadow: 0 18px 50px -30px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Klaviatura fokusi — kirish qulayligi (accessibility) */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Eyebrow yorlig'iga yumshoq porlash */
+.eyebrow {
+  gap: 12px;
+}
+.eyebrow::before {
+  width: 30px;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Scrollbar — yupqaroq va nafis */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-gradient);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+  background-clip: padding-box;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand) transparent;
+}
+
+/* Matn/rasm tanlanishi tekis o'chsin (drag paytida) */
+.interactive {
+  -webkit-tap-highlight-color: transparent;
 }

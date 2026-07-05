@@ -10,12 +10,12 @@ const InstagramVideo = ({ url }) => {
   
   return (
     <iframe
+      className="pstep__media"
       src={embedUrl}
-      width="100%"
-      height="450px"
       frameBorder="0"
       scrolling="no"
       allowtransparency="true"
+      loading="lazy"
       title="Instagram Video"
     ></iframe>
   );
