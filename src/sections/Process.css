@@ -25,16 +25,20 @@
   order: -1;
 }
 
-/* VIDEOLAR TO'LIQ SIG'ISHI UCHUN YANGILANGAN QISM */
+/* VIDEOLAR — Instagram reel embed (laptop + telefon uchun moslashuvchan) */
 .pstep__media-wrap {
   position: relative;
   border-radius: 24px;
   overflow: hidden;
-  /* Instagram post/video to'liq sig'ishi uchun vertikal proporsiya */
-  aspect-ratio: 1 / 1.15; 
+  /* Instagram reel embed proporsiyasi (video + header/footer) */
+  aspect-ratio: 1 / 1.42;
   border: 1px solid var(--border);
   background-color: #000; /* Video yuklanguncha qora fon */
   width: 100%;
+  /* Laptop/desktop'da reel juda kattalashib ketmasligi uchun cheklaymiz */
+  max-width: 380px;
+  margin-inline: auto;
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
 }
 .pstep__media {
   width: 100%;
@@ -187,10 +191,11 @@
     order: 0;
   }
   
-  /* Mobil ekranda videoga mos aniq balandlik beramiz */
+  /* Mobil ekranda videoga mos aniq balandlik beramiz (avvalgidek to'liq kenglik) */
   .pstep__media-wrap {
     aspect-ratio: unset;
-    height: 490px; 
+    height: 520px;
+    max-width: 460px;
   }
   
   .process__ba-grid {

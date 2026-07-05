@@ -1,71 +1,116 @@
-// Autentifikatsiya konteksti — ro'yxatdan o'tish, kirish, chiqish
-// va foydalanuvchi profilini (Firestore) boshqaradi.
+// Autentifikatsiya / Profil konteksti.
+// YANGI: sayt birinchi ochilganda foydalanuvchi ism + telefon (+ ixtiyoriy mashina)
+// kiritadi va "Kirish" bosilganда unga darhol lokal profil yaratiladi (login/parol
+// talab qilinmaydi). Profil brauzerда (localStorage) saqlanadi va mumkin bo'lsa
+// Firestore'ga ham sinxronlanadi (best-effort).
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../lib/firebase.js";
+import { doc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase.js";
 
 const AuthContext = createContext(null);
-const NO_AUTH = "Firebase sozlanmagan. .env.local dagi VITE_FIREBASE_API_KEY ni tekshiring va serverni qayta ishga tushiring.";
+const LS_KEY = "apex_profile_v1";
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLocal(profile) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(profile));
+  } catch {
+    /* localStorage to'la yoki bloklangan bo'lishi mumkin — jim o'tamiz */
+  }
+}
+
+function makeUid() {
+  return "u_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(() => loadLocal());
   const [loading, setLoading] = useState(true);
 
-  const loadProfile = useCallback(async (uid) => {
-    if (!db) return setProfile(null);
-    try {
-      const snap = await getDoc(doc(db, "users", uid));
-      if (snap.exists()) setProfile({ uid, ...snap.data() });
-      else setProfile(null);
-    } catch {
-      setProfile(null);
-    }
+  useEffect(() => {
+    // Lokal profil sinxron o'qiladi — shunchaki loading bayrog'ini o'chiramiz.
+    setLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (!auth) { setLoading(false); return; } // kalit noto'g'ri bo'lsa — crash bo'lmaydi
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      if (u) await loadProfile(u.uid);
-      else setProfile(null);
-      setLoading(false);
-    });
-    return () => unsub();
-  }, [loadProfile]);
+  // Ro'yxatdan o'tish (onboarding) — ism, telefon, ixtiyoriy mashina.
+  const completeOnboarding = useCallback(({ name, phone, currentCar = "" }) => {
+    const uid = makeUid();
+    const p = {
+      uid,
+      name: (name || "").trim(),
+      displayName: (name || "").trim(),
+      phone: (phone || "").trim(),
+      currentCar: currentCar || "",
+      photoURL: "",
+      bio: "",
+      email: "",
+      role: "user",
+      createdAt: Date.now(),
+    };
+    saveLocal(p);
+    setProfile(p);
+    // Firestore mavjud bo'lsa — fon rejimida sinxronlaymiz (xato bo'lsa jim o'tamiz).
+    if (db) {
+      setDoc(doc(db, "users", uid), { ...p, createdAt: serverTimestamp() }).catch(() => {});
+    }
+    return p;
+  }, []);
 
-  const register = async ({ name, email, password, phone = "" }) => {
-    if (!auth || !db) throw new Error(NO_AUTH);
-    const { user: u } = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "users", u.uid), {
-      uid: u.uid, name, displayName: name, email, phone,
-      photoURL: "", bio: "", currentCar: "", role: "user", createdAt: serverTimestamp(),
+  // Profilni yangilash (rasm, ism, telefon, mashina, bio ...).
+  const updateProfile = useCallback((patch) => {
+    let updated = null;
+    setProfile((prev) => {
+      if (!prev) return prev;
+      updated = { ...prev, ...patch };
+      saveLocal(updated);
+      return updated;
     });
-    await loadProfile(u.uid);
-    return u;
+    if (db && updated?.uid) {
+      updateDoc(doc(db, "users", updated.uid), patch).catch(() => {});
+    }
+    return updated;
+  }, []);
+
+  const logout = useCallback(() => {
+    try {
+      localStorage.removeItem(LS_KEY);
+    } catch {
+      /* ignore */
+    }
+    setProfile(null);
+    return Promise.resolve();
+  }, []);
+
+  const refreshProfile = useCallback(() => {
+    setProfile(loadLocal());
+  }, []);
+
+  // Backward-compat: ko'p joyda `user` va `user.uid` ishlatiladi.
+  const user = profile ? { uid: profile.uid, email: profile.email || "" } : null;
+
+  const value = {
+    user,
+    profile,
+    loading,
+    needsOnboarding: !loading && !profile,
+    completeOnboarding,
+    updateProfile,
+    logout,
+    refreshProfile,
+    // Eski AuthModal importlari buzilmasligi uchun (endi ishlatilmaydi):
+    register: async () => {},
+    login: async () => {},
   };
 
-  const login = async ({ email, password }) => {
-    if (!auth) throw new Error(NO_AUTH);
-    const { user: u } = await signInWithEmailAndPassword(auth, email, password);
-    await loadProfile(u.uid);
-    return u;
-  };
-
-  const logout = () => (auth ? signOut(auth) : Promise.resolve());
-  const refreshProfile = () => (user ? loadProfile(user.uid) : null);
-
-  return (
-    <AuthContext.Provider value={{ user, profile, loading, register, login, logout, refreshProfile }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

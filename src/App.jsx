@@ -9,6 +9,7 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import CartDrawer from "./components/cart/CartDrawer.jsx";
+import Onboarding from "./components/auth/Onboarding.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
 import Shop from "./pages/Shop.jsx";
@@ -30,14 +31,18 @@ export default function App() {
 
   if (isRace) {
     return (
-      <Routes>
-        <Route path="/race" element={<RaceArena />} />
-      </Routes>
+      <>
+        <Onboarding />
+        <Routes>
+          <Route path="/race" element={<RaceArena />} />
+        </Routes>
+      </>
     );
   }
 
   return (
     <>
+      <Onboarding />
       <ScrollProgress />
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <div aria-hidden={loading}>

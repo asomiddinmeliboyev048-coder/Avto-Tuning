@@ -1,18 +1,40 @@
-// Foydalanuvchi profili — avatar yuklash, ma'lumotlarni tahrirlash.
-// (Keyingi bosqichlarda: video yuklash, navbatlar, buyurtmalar shu yerga qo'shiladi.)
+// Foydalanuvchi profili — yumaloq avatar (rasm yuklash), ma'lumotlarni tahrirlash.
+// Rasm brauzerда siqib (256px) lokal saqlanadi — internetsiz ham ishlaydi.
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
 import { Camera, LogOut, Save, Loader2, Video } from "lucide-react";
-import { db } from "../lib/firebase.js";
-import { uploadFile } from "../lib/supabase.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UZ_CARS } from "../data/content.js";
 import VideoUpload from "../components/video/VideoUpload.jsx";
 import "./Profile.css";
 
+// Rasmni 256x256 ga kesib/siqib dataURL qaytaradi (localStorage'ga sig'ishi uchun).
+function compressImage(file, size = 256) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        const min = Math.min(img.width, img.height);
+        const sx = (img.width - min) / 2;
+        const sy = (img.height - min) / 2;
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function Profile() {
-  const { user, profile, loading, logout, refreshProfile } = useAuth();
+  const { user, profile, loading, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
   const fileRef = useRef(null);
 
@@ -51,38 +73,35 @@ export default function Profile() {
     setUploading(true);
     setMsg("");
     try {
-      const { url } = await uploadFile("avatars", file);
-      await updateDoc(doc(db, "users", user.uid), { photoURL: url });
-      await refreshProfile();
+      const dataUrl = await compressImage(file);
+      updateProfile({ photoURL: dataUrl });
       setMsg("Rasm yangilandi ✅");
-    } catch (err) {
-      setMsg("Yuklashda xato: " + (err.message || "policy tekshiring"));
+    } catch {
+      setMsg("Rasmni o'qib bo'lmadi. Boshqa rasm tanlang.");
     } finally {
       setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
     }
   };
 
-  const save = async () => {
+  const save = () => {
     setSaving(true);
     setMsg("");
-    try {
-      await updateDoc(doc(db, "users", user.uid), {
-        name: form.name,
-        displayName: form.name,
-        phone: form.phone,
-        bio: form.bio,
-        currentCar: form.currentCar,
-      });
-      await refreshProfile();
-      setMsg("Saqlandi ✅");
-    } catch (err) {
-      setMsg("Xato: " + (err.message || ""));
-    } finally {
+    updateProfile({
+      name: form.name,
+      displayName: form.name,
+      phone: form.phone,
+      bio: form.bio,
+      currentCar: form.currentCar,
+    });
+    setTimeout(() => {
       setSaving(false);
-    }
+      setMsg("Saqlandi ✅");
+    }, 250);
   };
 
-  const initial = (form.name || profile.email || "?")[0]?.toUpperCase();
+  const carName = UZ_CARS.find((c) => c.id === profile.currentCar)?.name;
+  const initial = (form.name || "?")[0]?.toUpperCase();
 
   return (
     <section className="profile section">
@@ -92,6 +111,7 @@ export default function Profile() {
             className="profile__avatar"
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
+            title="Profil rasmini yuklash"
             style={
               profile.photoURL
                 ? { backgroundImage: `url(${profile.photoURL})` }
@@ -112,7 +132,8 @@ export default function Profile() {
           />
           <div className="profile__id">
             <h2>{form.name || "Foydalanuvchi"}</h2>
-            <p>{profile.email}</p>
+            <p>{profile.phone || "Telefon kiritilmagan"}</p>
+            {carName && <span className="profile__car">🚗 {carName}</span>}
             {profile.role === "admin" && <span className="profile__badge">ADMIN</span>}
           </div>
           <button className="profile__logout" onClick={() => { logout(); navigate("/"); }}>

@@ -5,7 +5,6 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { NAV_LINKS } from "../data/content.js";
-import AuthModal from "./auth/AuthModal.jsx";
 import "./Header.css";
 
 export default function Header() {
@@ -16,7 +15,6 @@ export default function Header() {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
   const [active, setActive] = useState("hero");
   const headerRef = useRef(null);
   const navItemsRef = useRef([]);
@@ -134,11 +132,12 @@ export default function Header() {
               {count > 0 && <span className="header__cart-badge">{count}</span>}
             </button>
 
-            {user ? (
+            {user && (
               <button
                 className="header__profile interactive"
                 onClick={() => navigate("/profile")}
                 aria-label="Profil"
+                title="Profilim"
                 style={
                   profile?.photoURL
                     ? { backgroundImage: `url(${profile.photoURL})` }
@@ -146,13 +145,6 @@ export default function Header() {
                 }
               >
                 {!profile?.photoURL && <span>{initial}</span>}
-              </button>
-            ) : (
-              <button
-                className="btn btn-primary header__cta"
-                onClick={() => setAuthOpen(true)}
-              >
-                Kirish
               </button>
             )}
 
@@ -182,7 +174,7 @@ export default function Header() {
           <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/dokon"); }}>Dokon</button>
           <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/videolar"); }}>Videolar</button>
           <button className="header__mobile-link" onClick={() => go("booking")}>Tamirlash — navbat olish</button>
-          {user ? (
+          {user && (
             <button
               className="header__mobile-link"
               onClick={() => { setMenuOpen(false); navigate("/profile"); }}
@@ -190,18 +182,9 @@ export default function Header() {
               <User size={16} style={{ marginRight: 8, verticalAlign: "-3px" }} />
               Profilim
             </button>
-          ) : (
-            <button
-              className="header__mobile-link"
-              onClick={() => { setMenuOpen(false); setAuthOpen(true); }}
-            >
-              Kirish / Ro'yxatdan o'tish
-            </button>
           )}
         </div>
       </header>
-
-      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </>
   );
 }

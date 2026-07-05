@@ -77,6 +77,13 @@
   color: var(--text-dim);
   font-size: 0.9rem;
 }
+.profile__car {
+  display: inline-block;
+  margin-top: 6px;
+  margin-right: 8px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
 .profile__badge {
   display: inline-block;
   margin-top: 6px;
