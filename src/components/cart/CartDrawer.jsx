@@ -1,6 +1,7 @@
-// Savat paneli (o'ngdan chiqadi) + buyurtma berish (Firestore orders).
+// Savat paneli (o'ngdan chiqadi) — Yandex Market uslubi.
+// Rasm + narx + miqdor o'zgartirgich + buyurtma berish (Firestore orders).
 import { useState } from "react";
-import { X, Plus, Minus, Trash2, ShoppingBag, Check } from "lucide-react";
+import { X, Plus, Minus, Trash2, ShoppingBag, Check, ShoppingCart } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../lib/firebase.js";
 import { useCart } from "../../context/CartContext.jsx";
@@ -18,7 +19,7 @@ export default function CartDrawer() {
   const [err, setErr] = useState("");
 
   const startCheckout = () => {
-    if (!user) { setErr("Buyurtma berish uchun avval tizimga kiring"); return; }
+    if (!user) { setErr("Buyurtma berish uchun avval profilingizni to'ldiring"); return; }
     setErr("");
     setForm({ name: profile?.name || profile?.displayName || "", phone: profile?.phone || "" });
     setCheckout(true);
@@ -53,8 +54,8 @@ export default function CartDrawer() {
       <div className={`cart__scrim ${open ? "is-open" : ""}`} onClick={close} />
       <aside className={`cart ${open ? "is-open" : ""}`}>
         <div className="cart__head">
-          <h3><ShoppingBag size={18} /> Savat {count > 0 && <span>({count})</span>}</h3>
-          <button onClick={close}><X size={20} /></button>
+          <h3><ShoppingBag size={19} /> Savat {count > 0 && <span>({count})</span>}</h3>
+          <button className="cart__close" onClick={close} aria-label="Yopish"><X size={20} /></button>
         </div>
 
         {done ? (
@@ -65,25 +66,42 @@ export default function CartDrawer() {
             <button className="cart__checkout" onClick={close}>Yopish</button>
           </div>
         ) : items.length === 0 ? (
-          <div className="cart__empty"><ShoppingBag size={40} /><p>Savat bo'sh</p></div>
+          <div className="cart__empty">
+            <div className="cart__empty-ic"><ShoppingCart size={40} /></div>
+            <p>Savat bo'sh</p>
+            <span>Do'kondan mahsulot qo'shing</span>
+            <button className="cart__shop-btn" onClick={close}>Xaridni davom ettirish</button>
+          </div>
         ) : (
           <>
             <div className="cart__items">
-              {items.map((i) => (
-                <div key={i.id} className="cart__item">
-                  <div className="cart__thumb" style={i.image ? { backgroundImage: `url(${i.image})` } : undefined} />
-                  <div className="cart__info">
-                    <p className="cart__name">{i.name}</p>
-                    <p className="cart__price">{formatSom(i.price)}</p>
-                    <div className="cart__qty">
-                      <button onClick={() => updateQty(i.id, i.qty - 1)}><Minus size={13} /></button>
-                      <span>{i.qty}</span>
-                      <button onClick={() => updateQty(i.id, i.qty + 1)}><Plus size={13} /></button>
+              {items.map((i) => {
+                const hasDiscount = i.oldPrice && i.oldPrice > i.price;
+                return (
+                  <div key={i.id} className="cart__item">
+                    <div
+                      className="cart__thumb"
+                      style={i.image ? { backgroundImage: `url(${i.image})` } : undefined}
+                    />
+                    <div className="cart__info">
+                      <p className="cart__name">{i.name}</p>
+                      {i.category && <span className="cart__cat">{i.category}</span>}
+                      <div className="cart__price-row">
+                        <span className="cart__price">{formatSom(i.price)}</span>
+                        {hasDiscount && <span className="cart__oldprice">{formatSom(i.oldPrice)}</span>}
+                      </div>
+                      <div className="cart__item-foot">
+                        <div className="cart__qty">
+                          <button onClick={() => updateQty(i.id, i.qty - 1)} aria-label="Kamaytirish"><Minus size={14} /></button>
+                          <span>{i.qty}</span>
+                          <button onClick={() => updateQty(i.id, i.qty + 1)} aria-label="Ko'paytirish"><Plus size={14} /></button>
+                        </div>
+                        <button className="cart__del" onClick={() => removeItem(i.id)} aria-label="O'chirish"><Trash2 size={16} /></button>
+                      </div>
                     </div>
                   </div>
-                  <button className="cart__del" onClick={() => removeItem(i.id)}><Trash2 size={15} /></button>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {checkout ? (
@@ -98,6 +116,10 @@ export default function CartDrawer() {
               </div>
             ) : (
               <div className="cart__foot">
+                <div className="cart__summary">
+                  <span>Mahsulotlar ({count})</span>
+                  <span>{formatSom(total)}</span>
+                </div>
                 <div className="cart__total"><span>Jami</span><strong>{formatSom(total)}</strong></div>
                 {err && <p className="cart__err">{err}</p>}
                 <button className="cart__checkout" onClick={startCheckout}>Buyurtma berish</button>

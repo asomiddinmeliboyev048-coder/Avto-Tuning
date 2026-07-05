@@ -15,13 +15,24 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
-  const addItem = (product) => {
+  const addItem = (product, openDrawer = true) => {
     setItems((prev) => {
       const found = prev.find((i) => i.id === product.id);
       if (found) return prev.map((i) => (i.id === product.id ? { ...i, qty: i.qty + 1 } : i));
-      return [...prev, { id: product.id, name: product.name, price: product.price, image: product.image || product.imageURL || "", qty: 1 }];
+      return [
+        ...prev,
+        {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          oldPrice: product.oldPrice || 0,
+          image: product.image || product.imageURL || "",
+          category: product.category || "",
+          qty: 1,
+        },
+      ];
     });
-    setOpen(true);
+    if (openDrawer) setOpen(true);
   };
   const removeItem = (id) => setItems((prev) => prev.filter((i) => i.id !== id));
   const updateQty = (id, qty) =>

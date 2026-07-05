@@ -6,6 +6,8 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 .cart__scrim.is-open { opacity: 1; pointer-events: auto; }
 
@@ -14,7 +16,7 @@
   top: 0;
   right: 0;
   z-index: 1600;
-  width: min(400px, 92vw);
+  width: min(420px, 94vw);
   height: 100%;
   background: var(--bg-elev);
   border-left: 1px solid var(--border-strong);
@@ -33,21 +35,46 @@
   padding: 20px;
   border-bottom: 1px solid var(--border);
 }
-.cart__head h3 { display: flex; align-items: center; gap: 9px; font-size: 1.1rem; }
+.cart__head h3 { display: flex; align-items: center; gap: 9px; font-size: 1.15rem; }
 .cart__head h3 span { color: var(--brand); }
-.cart__head button { color: var(--text-dim); }
+.cart__close {
+  color: var(--text-dim);
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  transition: background 0.2s, color 0.2s;
+}
+.cart__close:hover { background: var(--bg-card-hover); color: var(--text); }
 
+/* Bo'sh / tugadi holatlari */
 .cart__empty, .cart__done {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   color: var(--text-dim);
   text-align: center;
   padding: 24px;
 }
+.cart__empty-ic {
+  width: 84px; height: 84px; border-radius: 50%;
+  background: var(--bg-card); color: var(--text-faint);
+  display: grid; place-items: center; margin-bottom: 6px;
+}
+.cart__empty p { color: var(--text); font-size: 1.15rem; font-weight: 700; font-family: var(--font-display); }
+.cart__empty span { font-size: 0.9rem; }
+.cart__shop-btn {
+  margin-top: 12px;
+  padding: 12px 22px;
+  border-radius: 100px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.cart__shop-btn:hover { border-color: var(--brand); color: var(--brand); }
 .cart__done-ic {
   width: 68px; height: 68px; border-radius: 50%;
   background: rgba(34, 197, 139, 0.16); color: #22c58b;
@@ -55,37 +82,77 @@
 }
 .cart__done h4 { color: var(--text); font-size: 1.2rem; }
 
+/* Mahsulotlar ro'yxati */
 .cart__items { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .cart__item {
-  display: flex; gap: 12px; align-items: center;
+  display: flex; gap: 12px;
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 10px;
+  border-radius: 16px; padding: 10px;
+  transition: border-color 0.2s;
 }
+.cart__item:hover { border-color: var(--border-strong); }
 .cart__thumb {
-  width: 58px; height: 58px; border-radius: 10px; flex-shrink: 0;
-  background: var(--accent) center/cover; background-size: contain; background-repeat: no-repeat;
+  width: 76px; height: 76px; border-radius: 12px; flex-shrink: 0;
+  background: #ffffff center/cover no-repeat;
+  border: 1px solid var(--border);
 }
-.cart__info { flex: 1; min-width: 0; }
-.cart__name { font-size: 0.9rem; font-weight: 600; }
-.cart__price { color: var(--brand); font-size: 0.85rem; font-weight: 600; margin: 2px 0 6px; }
-.cart__qty { display: flex; align-items: center; gap: 10px; }
-.cart__qty button { width: 26px; height: 26px; border-radius: 7px; background: var(--accent); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text); }
-.cart__qty span { font-weight: 600; min-width: 18px; text-align: center; }
-.cart__del { color: var(--text-faint); align-self: flex-start; }
-.cart__del:hover { color: var(--brand); }
+.cart__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cart__name {
+  font-size: 0.9rem; font-weight: 600; line-height: 1.3; color: var(--text);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.cart__cat { font-size: 0.66rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+.cart__price-row { display: flex; align-items: baseline; gap: 7px; margin-top: 2px; }
+.cart__price { font-family: var(--font-display); font-weight: 800; font-size: 1.02rem; color: var(--text); }
+.cart__oldprice { text-decoration: line-through; color: var(--text-faint); font-size: 0.78rem; }
 
-.cart__foot, .cart__checkout-form { padding: 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
-.cart__total { display: flex; justify-content: space-between; align-items: center; }
-.cart__total strong { font-size: 1.3rem; color: var(--brand); font-family: var(--font-display); }
-.cart__checkout {
-  width: 100%; padding: 15px; border-radius: 12px;
-  background: var(--brand-gradient); color: #fff; font-weight: 700; font-size: 0.98rem;
-  box-shadow: 0 10px 30px -10px var(--accent-glow);
+.cart__item-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
 }
+/* Yandex sariq miqdor o'zgartirgich */
+.cart__qty {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #ffd23f; border-radius: 10px; padding: 3px;
+}
+.cart__qty button {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(0, 0, 0, 0.07); color: #1a1a1a;
+  display: grid; place-items: center;
+  transition: background 0.15s;
+}
+.cart__qty button:hover { background: rgba(0, 0, 0, 0.16); }
+.cart__qty span { font-weight: 700; min-width: 22px; text-align: center; color: #1a1a1a; font-size: 0.9rem; }
+.cart__del {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: grid; place-items: center;
+  color: var(--text-faint);
+  transition: background 0.2s, color 0.2s;
+}
+.cart__del:hover { background: var(--bg-card-hover); color: var(--brand); }
+
+/* Pastki qism */
+.cart__foot, .cart__checkout-form { padding: 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+.cart__summary {
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--text-dim); font-size: 0.9rem;
+}
+.cart__total { display: flex; justify-content: space-between; align-items: center; }
+.cart__total span { font-weight: 600; }
+.cart__total strong { font-size: 1.4rem; color: var(--text); font-family: var(--font-display); }
+.cart__checkout {
+  width: 100%; padding: 15px; border-radius: 14px;
+  background: var(--brand-gradient); color: #fff; font-weight: 700; font-size: 1rem;
+  box-shadow: 0 10px 30px -10px var(--accent-glow);
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+}
+.cart__checkout:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -10px var(--accent-glow); }
+.cart__checkout:disabled { opacity: 0.7; }
 .cart__back { color: var(--text-dim); font-size: 0.85rem; }
 .cart__checkout-form input {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
   color: var(--text); padding: 13px 14px; font-family: inherit; font-size: 0.95rem; outline: none;
+  transition: border-color 0.2s;
 }
 .cart__checkout-form input:focus { border-color: var(--brand); }
 .cart__err { color: #ff6b6b; font-size: 0.82rem; text-align: center; }
