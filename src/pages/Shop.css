@@ -1,38 +1,121 @@
-.shop { padding-top: calc(var(--nav-h) + 30px); min-height: 100vh; }
-.shop__head { max-width: 620px; margin-bottom: 28px; }
+.shop {
+  padding-top: calc(var(--nav-h) + 30px);
+  min-height: 100vh;
+  padding-bottom: 110px;
+}
+.shop__head { max-width: 620px; margin-bottom: 30px; }
 
-.shop__cats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+/* Kategoriya filtrlari */
+.shop__cats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
 .shop__cat {
   padding: 9px 18px; border-radius: 100px; font-size: 0.85rem; font-weight: 600;
   background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim);
   transition: all 0.25s var(--ease-out-expo);
 }
 .shop__cat:hover { color: var(--text); border-color: var(--border-strong); }
-.shop__cat.is-active { background: var(--brand-gradient); color: #fff; border-color: transparent; }
+.shop__cat.is-active {
+  background: var(--brand-gradient); color: #fff; border-color: transparent;
+  box-shadow: 0 8px 22px -10px var(--accent-glow);
+}
 
 .shop__loading { color: var(--text-dim); text-align: center; padding: 40px; }
 
-.shop__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
-.shop__card { border-radius: 18px; overflow: hidden; transition: transform 0.3s var(--ease-out-expo); }
-.shop__card:hover { transform: translateY(-4px); }
-.shop__img {
-  height: 150px; background: var(--accent) center/cover no-repeat;
-  background-size: cover;
+/* Mahsulotlar to'ri */
+.shop__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
 }
-.shop__body { padding: 14px; }
-.shop__cat-tag { font-size: 0.7rem; color: var(--brand); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
-.shop__name { font-size: 0.95rem; font-weight: 600; margin: 6px 0 12px; line-height: 1.3; }
-.shop__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.shop__price { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--brand); }
-.shop__add {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 600;
-  background: var(--bg-card-hover); border: 1px solid var(--border-strong); color: var(--text);
-  transition: all 0.2s;
-}
-.shop__add:hover { background: var(--brand); border-color: var(--brand); color: #fff; }
 
+/* Kartochka — vertikal flex, tugma doim pastda tekislanadi */
+.shop__card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: transform 0.35s var(--ease-out-expo),
+              border-color 0.35s var(--ease-out-expo),
+              box-shadow 0.35s var(--ease-out-expo);
+}
+.shop__card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-strong);
+  box-shadow: 0 22px 50px -26px rgba(0, 0, 0, 0.65);
+}
+
+/* Rasm — bir xil nisbat, hoverda yumshoq zoom */
+.shop__img {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  background: var(--bg-elev) center/cover no-repeat;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+.shop__card:hover .shop__img { transform: scale(1.06); }
+
+/* Tana (matn qismi) */
+.shop__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 16px 18px;
+}
+.shop__cat-tag {
+  font-size: 0.68rem; color: var(--brand); letter-spacing: 0.1em;
+  text-transform: uppercase; font-weight: 700;
+}
+.shop__name {
+  font-size: 1rem; font-weight: 600; margin: 7px 0 0; line-height: 1.35;
+  color: var(--text);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.7em;
+}
+
+/* Narx + tugma — vertikal, tugma pastda to'liq kenglikda */
+.shop__row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+.shop__price {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1rem, 3.5vw, 1.2rem); color: var(--brand);
+  line-height: 1.1;
+}
+.shop__add {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;
+  background: var(--bg-card-hover); border: 1px solid var(--border-strong); color: var(--text);
+  transition: transform 0.2s var(--ease-out-expo),
+              box-shadow 0.3s, background 0.25s, border-color 0.25s, color 0.25s;
+}
+.shop__add:hover {
+  background: var(--brand-gradient); border-color: transparent; color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -10px var(--accent-glow);
+}
+.shop__add:active { transform: translateY(0) scale(0.98); }
+
+/* Planshet */
+@media (max-width: 900px) {
+  .shop__grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+}
+
+/* Mobil */
 @media (max-width: 600px) {
-  .shop__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .shop__img { height: 120px; }
+  .shop__grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .shop__body { padding: 13px 13px 15px; }
+  .shop__name { font-size: 0.92rem; min-height: 2.5em; }
+  .shop__add { padding: 11px 12px; font-size: 0.85rem; }
+}
+
+/* Juda kichik ekran — bitta ustun, kattaroq va chiroyliroq */
+@media (max-width: 380px) {
+  .shop__grid { grid-template-columns: 1fr; }
+  .shop__img { aspect-ratio: 16 / 10; }
 }
