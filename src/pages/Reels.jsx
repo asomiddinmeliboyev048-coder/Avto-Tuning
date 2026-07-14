@@ -28,10 +28,13 @@ export default function Reels() {
   const [paused, setPaused] = useState(false);
   const [commentsFor, setCommentsFor] = useState(null); // reel id
   const [showUpload, setShowUpload] = useState(false);
+  const [burstId, setBurstId] = useState(null); // double-tap yurak animatsiyasi
 
   const videoRefs = useRef({}); // id -> <video>
   const reelRefs = useRef({});  // id -> section el
   const containerRef = useRef(null);
+  const lastTap = useRef(0);
+  const tapTimer = useRef(null);
 
   // Feed ochilganda body scroll'ni bloklaymiz (immersiv ko'rinish uchun)
   useEffect(() => {
@@ -116,6 +119,28 @@ export default function Reels() {
     else { el.pause?.(); setPaused(true); }
   };
 
+  // Faqat like qo'shadi (double-tap uchun) — Instagram uslubi
+  const addLike = (reel) => {
+    if (!user || reel.likes?.includes(user.uid)) return;
+    toggleLike(reel);
+  };
+
+  // Bosish: 1x -> play/pause (fayl video), 2x -> like + yurak animatsiyasi
+  const handleMediaTap = (reel, hasVideo) => {
+    const now = Date.now();
+    if (now - lastTap.current < 300) {
+      // Double-tap
+      clearTimeout(tapTimer.current);
+      addLike(reel);
+      setBurstId(reel.id);
+      setTimeout(() => setBurstId((b) => (b === reel.id ? null : b)), 850);
+    } else if (hasVideo) {
+      // Single-tap (double bo'lmasligini kutamiz)
+      tapTimer.current = setTimeout(() => togglePlay(reel), 280);
+    }
+    lastTap.current = now;
+  };
+
   if (loading) {
     return (
       <div className="reels reels--center">
@@ -159,7 +184,7 @@ export default function Reels() {
               {poster && <div className="reel__bg" style={{ backgroundImage: `url(${poster})` }} />}
 
               {/* Media */}
-              <div className="reel__media" onClick={() => !ytId && togglePlay(reel)}>
+              <div className="reel__media" onClick={() => handleMediaTap(reel, !ytId && !!reel.videoURL)}>
                 {ytId ? (
                   isActive ? (
                     <iframe
@@ -191,6 +216,11 @@ export default function Reels() {
                 {/* Pauza ikonkasi (faqat fayl videolar uchun) */}
                 {!ytId && paused && isActive && (
                   <div className="reel__playbtn"><Play size={44} fill="#fff" /></div>
+                )}
+
+                {/* Double-tap yurak animatsiyasi */}
+                {burstId === reel.id && (
+                  <div className="reel__burst"><Heart size={110} fill="#ff3d3d" color="#ff3d3d" /></div>
                 )}
               </div>
 
