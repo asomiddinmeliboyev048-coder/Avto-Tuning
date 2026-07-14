@@ -166,6 +166,7 @@ export default function Reels() {
   }
 
   return (
+    <>
     <div className="reels">
       <div className="reels__feed" ref={containerRef}>
         {reels.map((reel) => {
@@ -265,12 +266,13 @@ export default function Reels() {
       <button className="reels__fab" onClick={() => setShowUpload(true)} aria-label="Reels yuklash">
         <Plus size={24} />
       </button>
-
-      {commentsFor && (
-        <ReelComments videoId={commentsFor} onClose={() => setCommentsFor(null)} />
-      )}
-      <VideoUpload open={showUpload} onClose={() => setShowUpload(false)} />
     </div>
+
+    {commentsFor && (
+      <ReelComments videoId={commentsFor} onClose={() => setCommentsFor(null)} />
+    )}
+    <VideoUpload open={showUpload} onClose={() => setShowUpload(false)} />
+    </>
   );
 }
 

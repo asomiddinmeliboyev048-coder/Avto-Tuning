@@ -3,7 +3,7 @@
 .reels {
   position: fixed;
   inset: 0;
-  z-index: 1;            /* header (1000) va bottom-nav (1000) tepada qoladi */
+  z-index: 900;          /* footer (10) ustida, lekin header/bottom-nav (1000) tagida */
   background: #000;
 }
 .reels--center {
