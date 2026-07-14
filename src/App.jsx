@@ -10,6 +10,7 @@ import Footer from "./components/Footer.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import CartDrawer from "./components/cart/CartDrawer.jsx";
 import Onboarding from "./components/auth/Onboarding.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
 import Shop from "./pages/Shop.jsx";
@@ -47,16 +48,18 @@ export default function App() {
       <div aria-hidden={loading}>
         <Header />
         <main>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/dokon" element={<Shop />} />
-            <Route path="/reels" element={<Reels />} />
-            <Route path="/reels/:id" element={<Reels />} />
-            {/* Eski havolalar bilan moslik uchun */}
-            <Route path="/videolar" element={<Reels />} />
-            <Route path="/videolar/:id" element={<Reels />} />
-          </Routes>
+          <ErrorBoundary label="Sahifa yuklanmadi. Sahifani yangilab ko'ring.">
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/dokon" element={<Shop />} />
+              <Route path="/reels" element={<Reels />} />
+              <Route path="/reels/:id" element={<Reels />} />
+              {/* Eski havolalar bilan moslik uchun */}
+              <Route path="/videolar" element={<Reels />} />
+              <Route path="/videolar/:id" element={<Reels />} />
+            </Routes>
+          </ErrorBoundary>
         </main>
         <Footer />
         <CartDrawer />
