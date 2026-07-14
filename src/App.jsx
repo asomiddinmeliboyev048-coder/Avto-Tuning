@@ -13,8 +13,7 @@ import Onboarding from "./components/auth/Onboarding.jsx";
 import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
 import Shop from "./pages/Shop.jsx";
-import Videos from "./pages/Videos.jsx";
-import VideoDetail from "./pages/VideoDetail.jsx";
+import Reels from "./pages/Reels.jsx";
 import RaceArena from "./pages/RaceArena.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,8 +51,11 @@ export default function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/dokon" element={<Shop />} />
-            <Route path="/videolar" element={<Videos />} />
-            <Route path="/videolar/:id" element={<VideoDetail />} />
+            <Route path="/reels" element={<Reels />} />
+            <Route path="/reels/:id" element={<Reels />} />
+            {/* Eski havolalar bilan moslik uchun */}
+            <Route path="/videolar" element={<Reels />} />
+            <Route path="/videolar/:id" element={<Reels />} />
           </Routes>
         </main>
         <Footer />
