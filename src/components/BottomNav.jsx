@@ -1,12 +1,12 @@
 // Pastki navigatsiya paneli — faqat mobil (< 768px).
 import { useLocation, useNavigate } from "react-router-dom";
-import { Car, Wrench, Video, Store } from "lucide-react";
+import { Car, Wrench, Clapperboard, Store } from "lucide-react";
 import "./BottomNav.css";
 
 const ITEMS = [
   { label: "Garaj", icon: Car, type: "scroll", target: "garage" },
   { label: "Xizmat", icon: Wrench, type: "scroll", target: "booking" },
-  { label: "Video", icon: Video, type: "route", target: "/videolar" },
+  { label: "Reels", icon: Clapperboard, type: "route", target: "/reels" },
   { label: "Do'kon", icon: Store, type: "route", target: "/dokon" },
 ];
 

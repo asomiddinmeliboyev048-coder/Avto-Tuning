@@ -2,7 +2,7 @@
 // Rasm brauzerда siqib (256px) lokal saqlanadi — internetsiz ham ishlaydi.
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Camera, LogOut, Save, Loader2, Video } from "lucide-react";
+import { Camera, LogOut, Save, Loader2, Clapperboard } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UZ_CARS } from "../data/content.js";
 import VideoUpload from "../components/video/VideoUpload.jsx";
@@ -170,13 +170,14 @@ export default function Profile() {
         </div>
 
         <div className="profile__form glass">
-          <h3>Video yuklash</h3>
+          <h3>Reels yuklash</h3>
           <p style={{ color: "var(--text-dim)", fontSize: "0.9rem", marginBottom: 16 }}>
-            YouTube havolasi yoki galereyadan video qo'shing. Video admin tasdig'idan
-            o'tgach “Videolar” bo'limida ko'rinadi.
+            YouTube havolasi yoki galereyadan video qo'shing. Eng yaxshi ko'rinish uchun
+            vertikal (9:16) video tavsiya etiladi. Video admin tasdig'idan o'tgach
+            “Reels” bo'limida ko'rinadi.
           </p>
           <button className="btn btn-primary" style={{ alignSelf: "flex-start" }} onClick={() => setShowUpload(true)}>
-            <Video size={18} /> Video yuklash
+            <Clapperboard size={18} /> Reels yuklash
           </button>
         </div>
       </div>

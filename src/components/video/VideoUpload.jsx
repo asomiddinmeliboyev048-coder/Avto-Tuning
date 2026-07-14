@@ -1,5 +1,5 @@
-// Video yuklash modali — YouTube link YOKI galereyadan fayl + nom (majburiy).
-// Yuborilgach status="pending" -> admin tasdiqlagach videolar bo'limida ko'rinadi.
+// Reels yuklash modali — YouTube link YOKI galereyadan fayl + nom (majburiy).
+// Yuborilgach status="pending" -> admin tasdiqlagach Reels bo'limida ko'rinadi.
 import { useRef, useState } from "react";
 import { X, Youtube, UploadCloud, Check } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -75,19 +75,19 @@ export default function VideoUpload({ open, onClose }) {
         {done ? (
           <div className="vu__done">
             <div className="vu__done-ic"><Check size={32} /></div>
-            <h3>Video yuborildi!</h3>
-            <p>Videoingiz <b>admin tekshiruvidan o'tgandan so'nggina</b> videolar bo'limida ko'rinadi. Rahmat!</p>
+            <h3>Reels yuborildi!</h3>
+            <p>Videoingiz <b>admin tekshiruvidan o'tgandan so'nggina</b> Reels bo'limida ko'rinadi. Rahmat!</p>
             <button className="btn btn-primary" onClick={close}>OK</button>
           </div>
         ) : (
           <>
-            <h3 className="vu__title">Video yuklash</h3>
+            <h3 className="vu__title">Reels yuklash</h3>
             <div className="vu__tabs">
               <button className={tab === "youtube" ? "is-active" : ""} onClick={() => setTab("youtube")}><Youtube size={16} /> YouTube</button>
               <button className={tab === "file" ? "is-active" : ""} onClick={() => setTab("file")}><UploadCloud size={16} /> Fayl</button>
             </div>
 
-            <label className="vu__label">Video nomi *</label>
+            <label className="vu__label">Reels nomi *</label>
             <input className="vu__input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Masalan: BMW M5 tonirovka jarayoni" />
 
             {tab === "youtube" ? (

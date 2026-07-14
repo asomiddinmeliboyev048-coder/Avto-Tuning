@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, User, ShoppingCart, Store, Wrench, Video } from "lucide-react";
+import { Sun, Moon, Menu, X, User, ShoppingCart, Store, Wrench, Clapperboard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
@@ -117,10 +117,10 @@ export default function Header() {
 
             <button
               className="header__theme header__navicon interactive"
-              onClick={() => navigate("/videolar")}
-              aria-label="Videolar"
+              onClick={() => navigate("/reels")}
+              aria-label="Reels"
             >
-              <Video size={18} />
+              <Clapperboard size={18} />
             </button>
 
             <button
@@ -172,7 +172,7 @@ export default function Header() {
             </button>
           ))}
           <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/dokon"); }}>Dokon</button>
-          <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/videolar"); }}>Videolar</button>
+          <button className="header__mobile-link" onClick={() => { setMenuOpen(false); navigate("/reels"); }}>Reels</button>
           <button className="header__mobile-link" onClick={() => go("booking")}>Tamirlash — navbat olish</button>
           {user && (
             <button
