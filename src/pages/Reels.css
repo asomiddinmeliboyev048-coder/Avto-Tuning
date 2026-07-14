@@ -81,6 +81,53 @@
   height: 100%;
 }
 
+/* O'qilishi uchun tepa va past gradientlar (Instagram uslubi) */
+.reel::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 42%;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+.reel::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 16%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Double-tap yurak animatsiyasi */
+.reel__burst {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+  animation: reel-burst 0.85s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+}
+@keyframes reel-burst {
+  0%   { transform: scale(0.3); opacity: 0; }
+  15%  { transform: scale(1.15); opacity: 1; }
+  35%  { transform: scale(1); opacity: 1; }
+  75%  { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* Like tugmasi bosilganda "pop" */
+.reel__act.is-on svg { animation: reel-pop 0.35s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)); }
+@keyframes reel-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
 /* Pauza / play ikonkasi */
 .reel__playbtn {
   position: absolute;
