@@ -82,7 +82,7 @@ export default function Hero() {
       {/* Background car image with overlay (TINIQLASHTIRILGAN RASM) */}
       <div className="hero__bg" ref={carRef}>
         <img
-          src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWm0TUbBMllhol9eOywg92OQ98ZNHUJ8EuCwdFEPczCTMDW6ygrVHB1_db9Tcv0mPiIQwKpJcRFcXJ6ZltYn9FIgRISg908bwTZIv2ycamdEympPPHFMZvkAj0az6yTj7L9_fo8DMsbRJNg=s1360-w1360-h1020-rw"
+          src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkpCRx6mQHD7Ec-_wZXRKfWNLkhxA1VLckPPUvwyP7kBLAks1QOXI7jtaDzXTdyNqvjZL05RO6DbtiEfZNDL3jKEY0FRCVStSXn7zrxH9Jv_2KfaFtfvcpOfn_1lHysMvDRENDn9SRHzMbF=s1360-w1360-h1020-rw"
           alt="Premium tuning avtomobili"
           loading="eager"
         />
