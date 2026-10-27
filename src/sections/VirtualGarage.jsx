@@ -373,15 +373,15 @@ export default function VirtualGarage() {
     return () => io.disconnect();
   }, []);
 
-  // Tezlik: garaj bo'limi ko'rinishga kelganda garaj + joriy mashinani oldindan
-  // yuklaymiz (preload). Shunda "3D garajni ochish" bosilganда deyarli darhol ochiladi.
+  // Tezlik: og'ir modellar faqat foydalanuvchi "3D garajni ochish"ni bosganda
+  // yuklanadi (bosh sahifa va galereya tezligini saqlash uchun).
   useEffect(() => {
-    if (!inView) return;
+    if (!show3D) return;
     try {
       useGLTF.preload(GARAGE_MODEL_PATH);
       useGLTF.preload(car.path);
     } catch { /* ignore */ }
-  }, [inView, car.path]);
+  }, [show3D, car.path]);
 
   // 3D ochilgandan so'ng qo'shni (oldingi/keyingi) mashinalarni fon rejimida
   // preload qilamiz — mashina almashtirish silliq bo'lishi uchun.
@@ -648,4 +648,3 @@ export default function VirtualGarage() {
 
 // Eslatma: 14 ta mashinani bir vaqtda preload qilmaymiz (WebGL/xotira yukini
 // kamaytirish uchun) — har bir mashina tanlanганда lazy yuklanadi.
-
