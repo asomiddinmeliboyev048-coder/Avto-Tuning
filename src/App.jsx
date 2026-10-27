@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,7 +15,8 @@ import Landing from "./Landing.jsx";
 import Profile from "./pages/Profile.jsx";
 import Shop from "./pages/Shop.jsx";
 import Reels from "./pages/Reels.jsx";
-import RaceArena from "./pages/RaceArena.jsx";
+// Og'ir 3D modullar faqat /race ga kirilganda yuklanadi
+const RaceArena = lazy(() => import("./pages/RaceArena.jsx"));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +35,14 @@ export default function App() {
       <>
         <Onboarding />
         <Routes>
-          <Route path="/race" element={<RaceArena />} />
+          <Route
+            path="/race"
+            element={
+              <Suspense fallback={null}>
+                <RaceArena />
+              </Suspense>
+            }
+          />
         </Routes>
       </>
     );
