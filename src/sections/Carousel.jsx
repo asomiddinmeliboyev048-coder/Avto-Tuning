@@ -77,7 +77,7 @@ export default function Carousel() {
               }
               aria-hidden={isMobile && i >= count ? "true" : undefined}
             >
-              <img src={src} alt={`Tuning ish ${(i % count) + 1}`} loading="lazy" />
+              <img src={src} alt={`Tuning ish ${(i % count) + 1}`} loading="eager" decoding="async" />
             </div>
           ))}
         </div>
