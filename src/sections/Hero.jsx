@@ -1,7 +1,9 @@
+
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ArrowDown, Play } from "lucide-react";
 import { STATS } from "../data/content.js";
+import bmwImage from "../assets/bmw1.jpg";
 import "./Hero.css";
 
 export default function Hero() {
@@ -82,9 +84,10 @@ export default function Hero() {
       {/* Background car image with overlay (TINIQLASHTIRILGAN RASM) */}
       <div className="hero__bg" ref={carRef}>
         <img
-          src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkpCRx6mQHD7Ec-_wZXRKfWNLkhxA1VLckPPUvwyP7kBLAks1QOXI7jtaDzXTdyNqvjZL05RO6DbtiEfZNDL3jKEY0FRCVStSXn7zrxH9Jv_2KfaFtfvcpOfn_1lHysMvDRENDn9SRHzMbF=s1360-w1360-h1020-rw"
+          src={bmwImage}
           alt="Premium tuning avtomobili"
           loading="eager"
+          fetchPriority="high"
         />
       </div>
 
